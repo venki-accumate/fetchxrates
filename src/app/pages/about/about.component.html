@@ -1,0 +1,77 @@
+<div class="about-page">
+  <section class="hero">
+    <div class="container">
+      <h1>About fetchxrates</h1>
+      <p class="subtitle">Providing reliable Australian exchange rate data since 2018</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="story">
+        <h2>Our Story</h2>
+        <p>fetchxrates was created to solve a simple problem: developers and businesses needed a reliable, fast, and affordable way to access official Australian exchange rate data from the Reserve Bank of Australia (RBA).</p>
+        <p>What started as a side project to help Australian fintech startups has grown into a trusted API serving thousands of requests daily for businesses worldwide. We take pride in providing accurate, timely exchange rate data that powers e-commerce platforms, financial applications, and analytical tools.</p>
+        <p>While the RBA publishes official exchange rates, accessing this data programmatically was often cumbersome. We built fetchxrates to make this process seamless with a modern REST API, comprehensive documentation, and developer-friendly features.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section values-section">
+    <div class="container">
+      <h2 class="section-title">Our Values</h2>
+      <div class="values-grid">
+        @for (value of values; track value.title) {
+          <div class="value-card">
+            <div class="value-icon">{{ value.icon }}</div>
+            <h3>{{ value.title }}</h3>
+            <p>{{ value.description }}</p>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="disclaimer-box">
+        <h3>⚠️ Important Disclaimer</h3>
+        <p>fetchxrates is an independent service that sources exchange rate data from publicly available Reserve Bank of Australia (RBA) publications. We are not affiliated with, endorsed by, or officially connected to the Reserve Bank of Australia.</p>
+        <p>The exchange rates we provide are derived from RBA data but are provided through our own infrastructure and API. For official RBA rates, please visit <a href="https://www.rba.gov.au" target="_blank" rel="noopener noreferrer">rba.gov.au</a>.</p>
+        <p><strong>This service is not intended for financial advice.</strong> Exchange rates are provided for informational purposes only. For financial decisions, please consult with qualified financial professionals.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section team-section">
+    <div class="container">
+      <h2 class="section-title">Our Team</h2>
+      <div class="team-grid">
+        @for (member of team; track member.name) {
+          <div class="team-card">
+            <h3>{{ member.name }}</h3>
+            <p class="role">{{ member.role }}</p>
+            <p>{{ member.description }}</p>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Ready to Get Started?</h2>
+        <p>Join thousands of developers using fetchxrates for reliable exchange rate data.</p>
+        <div class="cta-actions">
+          <app-button [variant]="'primary'" [size]="'lg'">
+            <a routerLink="/pricing" style="color: white; text-decoration: none;">View Pricing</a>
+          </app-button>
+          <app-button [variant]="'outline'" [size]="'lg'">
+            <a routerLink="/contact" style="color: white; text-decoration: none;">Contact Us</a>
+          </app-button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

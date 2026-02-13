@@ -1,0 +1,183 @@
+.hero {
+  text-align: center;
+  padding: 5rem 0 3rem;
+  background: linear-gradient(135deg, var(--bg-secondary) 0%, var(--bg-primary) 100%);
+  
+  h1 {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+  }
+  
+  .subtitle {
+    font-size: 1.25rem;
+    color: var(--text-secondary);
+  }
+}
+
+.story {
+  margin: 0 3rem;
+  
+  h2 {
+    font-size: 2.5rem;
+    margin-bottom: 2rem;
+  }
+  
+  p {
+    font-size: 1.125rem;
+    line-height: 1.8;
+    color: var(--text-secondary);
+    margin-bottom: 1.5rem;
+  }
+}
+
+.values-section {
+  background-color: var(--bg-secondary);
+}
+
+.section-title {
+  text-align: center;
+  font-size: 2.5rem;
+  margin-bottom: 3rem;
+}
+
+.values-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin: 0 3rem;
+}
+
+.value-card {
+  padding: 2rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+}
+
+.value-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+}
+
+.value-card h3 {
+  font-size: 1.5rem;
+  margin-bottom: 0.75rem;
+}
+
+.value-card p {
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+.disclaimer-box {
+  margin: 0 3rem;
+  padding: 2rem;
+  background-color: var(--bg-warning);
+  border: 2px solid var(--border-warning);
+  border-radius: 0.75rem;
+  
+  h3 {
+    font-size: 1.25rem;
+    margin-bottom: 1rem;
+    color: var(--text-warning);
+  }
+  
+  p {
+    color: var(--text-secondary);
+    line-height: 1.6;
+    margin-bottom: 1rem;
+    
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+  
+  a {
+    color: var(--accent);
+    text-decoration: underline;
+    
+    &:hover {
+      color: var(--accent-hover);
+    }
+  }
+  
+  strong {
+    color: var(--text-primary);
+  }
+}
+
+.team-section {
+  background-color: var(--bg-secondary);
+}
+
+.team-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 2rem;
+  margin: 0 3rem;
+}
+
+.team-card {
+  padding: 2rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+  text-align: center;
+  
+  h3 {
+    font-size: 1.5rem;
+    margin-bottom: 0.5rem;
+  }
+  
+  .role {
+    color: var(--accent);
+    font-weight: 600;
+    margin-bottom: 1rem;
+  }
+  
+  p:not(.role) {
+    color: var(--text-secondary);
+    line-height: 1.6;
+  }
+}
+
+.cta {
+  background: linear-gradient(135deg, var(--accent), #0066ff);
+  color: white;
+  text-align: center;
+  padding: 5rem 0;
+}
+
+.cta-content {
+  margin: 0 3rem;
+  
+  h2 {
+    font-size: 2.5rem;
+    color: white;
+    margin-bottom: 1rem;
+  }
+  
+  p {
+    font-size: 1.25rem;
+    color: rgba(255, 255, 255, 0.9);
+    margin-bottom: 2rem;
+  }
+}
+
+.cta-actions {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+@media (max-width: 968px) {
+  .values-grid,
+  .team-grid {
+    grid-template-columns: 1fr;
+  }
+  
+  .hero h1 {
+    font-size: 2.5rem;
+  }
+}

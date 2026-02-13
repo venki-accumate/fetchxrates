@@ -1,0 +1,157 @@
+<app-hero></app-hero>
+
+<!-- Features Overview - Links to Features Page -->
+<section class="features-overview section">
+  <div class="container">
+    <div class="section-header text-center">
+      <span class="badge">Core features</span>
+      <h2>Everything You Need for FX Data Management</h2>
+      <p>Dashboard tools for finance teams and powerful API for developers</p>
+    </div>
+    
+    <div class="features-preview">
+      <!-- Dashboard Tier Preview -->
+      <div class="tier-preview">
+        <div class="tier-header">
+          <span class="tier-badge">Dashboard Tier</span>
+          <h3>Built for Finance Teams</h3>
+          <p>Powerful FX tools for spreadsheets — no formulas, no coding required</p>
+        </div>
+        
+        <div class="tier-features">
+          <div class="feature-item">
+            <span class="material-icons">file_download</span>
+            <span>Download FX rates</span>
+          </div>
+          <div class="feature-item">
+            <span class="material-icons">table_chart</span>
+            <span>Spreadsheet currency conversion</span>
+          </div>
+          <div class="feature-item">
+            <span class="material-icons">calendar_today</span>
+            <span>Historical date range export</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- API Tier Preview -->
+      <div class="tier-preview">
+        <div class="tier-header">
+          <span class="tier-badge accent">API Tier</span>
+          <h3>Developer-First API</h3>
+          <p>Fast, reliable FX data for your applications</p>
+        </div>
+        
+        <div class="tier-features">
+          <div class="feature-item">
+            <span class="material-icons">flash_on</span>
+            <span>Real-time FX rates</span>
+          </div>
+          <div class="feature-item">
+            <span class="material-icons">trending_up</span>
+            <span>Historical data access</span>
+          </div>
+          <div class="feature-item">
+            <span class="material-icons">account_balance</span>
+            <span>Multi-currency conversion</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="cta-center">
+      <a routerLink="/features" class="btn-primary">View All Features</a>
+    </div>
+  </div>
+</section>
+
+<!-- Code Example -->
+<section class="code-example section">
+  <div class="container">
+    <div class="section-header text-center">
+      <h2>Simple Integration</h2>
+      <p>Get started with just a few lines of code</p>
+    </div>
+    
+    <div class="code-wrapper">
+      <div class="code-tabs">
+        <button 
+          [class.active]="selectedCodeTab === 'curl'"
+          (click)="selectCodeTab('curl')">
+          cURL
+        </button>
+        <button 
+          [class.active]="selectedCodeTab === 'javascript'"
+          (click)="selectCodeTab('javascript')">
+          JavaScript
+        </button>
+        <button 
+          [class.active]="selectedCodeTab === 'python'"
+          (click)="selectCodeTab('python')">
+          Python
+        </button>
+        <button 
+          [class.active]="selectedCodeTab === 'php'"
+          (click)="selectCodeTab('php')">
+          PHP
+        </button>
+        
+        <button class="copy-btn" (click)="copyCode()">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <rect x="9" y="9" width="13" height="13" rx="2" ry="2"/>
+            <path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/>
+          </svg>
+          Copy
+        </button>
+      </div>
+      
+      <div class="code-content">
+        <pre><code>{{ codeExamples[selectedCodeTab] }}</code></pre>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Pricing -->
+<section class="pricing section">
+  <div class="container">
+    <div class="section-header text-center">
+      <h2>Simple, Transparent Pricing</h2>
+      <p>Choose the plan that fits your needs</p>
+    </div>
+    
+    <div class="pricing-grid">
+      @for (tier of pricingTiers; track tier.name) {
+        <div class="pricing-card" [attr.data-tier]="tier.name.toLowerCase()">
+          @if (tier.badgeText) {
+            <div class="recommendation-badge">
+              {{ tier.badgeText }}
+            </div>
+          }
+          
+          <h3>{{ tier.name }}</h3>
+          <div class="price">
+            <span class="amount">{{ tier.price }}</span>
+            <span class="period">{{ tier.period }}</span>
+          </div>
+          <p class="description">{{ tier.description }}</p>
+          
+          <ul class="features-list">
+            @for (feature of tier.features; track feature) {
+              <li>
+                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M16.6667 5L7.50004 14.1667L3.33337 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+                {{ feature }}
+              </li>
+            }
+          </ul>
+          
+          <button class="select-button">
+            {{ tier.cta }}
+          </button>
+        </div>
+      }
+    </div>
+  </div>
+</section>

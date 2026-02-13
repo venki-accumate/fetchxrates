@@ -1,0 +1,82 @@
+<div class="status-page">
+  <section class="hero">
+    <div class="container">
+      <h1>System Status</h1>
+      <div class="current-status">
+        <app-badge [variant]="getStatusBadgeVariant(currentStatus)" [size]="'lg'">
+          {{ currentStatus === 'operational' ? '✓ All Systems Operational' : currentStatus === 'degraded' ? '⚠ Degraded Performance' : '✕ Service Outage' }}
+        </app-badge>
+        <p class="uptime">{{ uptime }}% uptime (last 30 days)</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <h2>Services</h2>
+      <div class="services-list">
+        @for (service of services; track service.name) {
+          <div class="service-item">
+            <div class="service-info">
+              <h3>{{ service.name }}</h3>
+              <app-badge [variant]="getStatusBadgeVariant(service.status)">
+                {{ service.status }}
+              </app-badge>
+            </div>
+            <div class="service-uptime">
+              <span>{{ service.uptime }}% uptime</span>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section metrics-section">
+    <div class="container">
+      <h2>Performance Metrics</h2>
+      <div class="metrics-grid">
+        @for (metric of metrics; track metric.label) {
+          <div class="metric-card">
+            <span class="metric-label">{{ metric.label }}</span>
+            <span class="metric-value">{{ metric.value }}</span>
+            @if (metric.trend === 'up') {
+              <span class="trend up">↗ Trending up</span>
+            } @else if (metric.trend === 'down') {
+              <span class="trend down">↘ Trending down</span>
+            } @else {
+              <span class="trend stable">→ Stable</span>
+            }
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section incidents-section">
+    <div class="container">
+      <h2>Recent Incidents</h2>
+      @if (incidents.length > 0) {
+        <div class="incidents-list">
+          @for (incident of incidents; track incident.title) {
+            <div class="incident-item">
+              <div class="incident-header">
+                <h3>{{ incident.title }}</h3>
+                <app-badge [variant]="getStatusBadgeVariant(incident.status)">
+                  {{ incident.status }}
+                </app-badge>
+              </div>
+              <p class="incident-date">{{ incident.date }}</p>
+              <p class="incident-description">{{ incident.description }}</p>
+            </div>
+          }
+        </div>
+      } @else {
+        <div class="no-incidents">
+          <div class="icon">✓</div>
+          <p>No incidents reported in the last 30 days</p>
+        </div>
+      }
+    </div>
+  </section>
+</div>

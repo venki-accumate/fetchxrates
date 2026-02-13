@@ -1,0 +1,134 @@
+<div class="pricing-page">
+  <section class="hero">
+    <div class="container">
+      <h1>Simple, Transparent Pricing</h1>
+      <p class="subtitle">Choose the plan that fits your needs. All plans include access to our full API and 21 currencies.</p>
+      
+      <!-- Billing Cycle Toggle -->
+      <div class="billing-toggle">
+        <button 
+          class="toggle-btn" 
+          [class.active]="billingCycle === 'monthly'"
+          (click)="toggleBillingCycle('monthly')">
+          Pay monthly
+        </button>
+        <button 
+          class="toggle-btn" 
+          [class.active]="billingCycle === 'yearly'"
+          (click)="toggleBillingCycle('yearly')">
+          Pay yearly <span class="savings-badge">save 17%</span>
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <!-- Tier Type Tabs wrapping pricing cards -->
+      <mat-tab-group class="pricing-tabs" [selectedIndex]="selectedTabIndex" (selectedIndexChange)="onTabChange($event)">
+        <mat-tab label="Dashboard Tier">
+          <div class="pricing-grid">
+            @for (tier of pricingTiers; track tier.id; let i = $index) {
+              <div class="pricing-card" [class.popular]="tier.popular" [attr.data-tier]="tier.name.toLowerCase()">
+                @if (tier.badgeText) {
+                  <div class="recommendation-badge">
+                    {{ tier.badgeText }}
+                  </div>
+                }
+                <h3>{{ tier.name }}</h3>
+                <div class="price">
+                  <span class="amount">${{ getPrice(i) }}</span>
+                  <span class="period">/{{ billingCycle === 'monthly' ? 'month' : 'year' }}</span>
+                </div>
+                <p class="description">{{ tier.description }}</p>
+                <ul class="features-list">
+                  @for (feature of tier.features; track feature) {
+                    <li>
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16.6667 5L7.50004 14.1667L3.33337 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      {{ feature }}
+                    </li>
+                  }
+                </ul>
+                <button class="select-button" (click)="selectPlan(tier)">
+                  {{ tier.cta }}
+                </button>
+              </div>
+            }
+          </div>
+        </mat-tab>
+        <mat-tab label="REST API Tier">
+          <div class="pricing-grid">
+            @for (tier of pricingTiers; track tier.id; let i = $index) {
+              <div class="pricing-card" [class.popular]="tier.popular" [attr.data-tier]="tier.name.toLowerCase()">
+                @if (tier.badgeText) {
+                  <div class="recommendation-badge">
+                    {{ tier.badgeText }}
+                  </div>
+                }
+                <h3>{{ tier.name }}</h3>
+                <div class="price">
+                  <span class="amount">${{ getPrice(i) }}</span>
+                  <span class="period">/{{ billingCycle === 'monthly' ? 'month' : 'year' }}</span>
+                </div>
+                <p class="description">{{ tier.description }}</p>
+                <ul class="features-list">
+                  @for (feature of tier.features; track feature) {
+                    <li>
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M16.6667 5L7.50004 14.1667L3.33337 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                      </svg>
+                      {{ feature }}
+                    </li>
+                  }
+                </ul>
+                <button class="select-button" (click)="selectPlan(tier)">
+                  {{ tier.cta }}
+                </button>
+              </div>
+            }
+          </div>
+        </mat-tab>
+      </mat-tab-group>
+    </div>
+  </section>
+
+  <section class="section faq-section">
+    <div class="container">
+      <div class="section-header">
+        <h2>Frequently Asked Questions</h2>
+        <p>Have questions about pricing? We're here to help.</p>
+      </div>
+      <div class="faq-list">
+        @for (faq of faqs; track faq.question; let i = $index) {
+          <div class="faq-item" [class.open]="faq.open">
+            <button class="faq-question" (click)="toggleFAQ(i)">
+              <span>{{ faq.question }}</span>
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            </button>
+            <div class="faq-answer">
+              <p>{{ faq.answer }}</p>
+            </div>
+          </div>
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section cta">
+    <div class="container">
+      <div class="cta-content">
+        <h2>Still have questions?</h2>
+        <p>Contact our sales team to discuss custom plans or enterprise solutions.</p>
+        <div class="cta-actions">
+          <app-button [variant]="'primary'" [size]="'lg'">
+            <a routerLink="/contact" style="color: white; text-decoration: none;">Contact Sales</a>
+          </app-button>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

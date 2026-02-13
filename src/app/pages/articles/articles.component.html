@@ -1,0 +1,28 @@
+<div class="articles-page">
+  <section class="hero">
+    <div class="container">
+      <h1>Articles & Resources</h1>
+      <p class="subtitle">Guides, tutorials, and best practices for working with exchange rate data.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="coming-soon">
+        <div class="icon">📝</div>
+        <h2>Coming Soon</h2>
+        <p>We're working on creating helpful articles, tutorials, and guides to help you get the most out of fetchxrates. Check back soon!</p>
+        <div class="preview-list">
+          @for (article of articles; track article.title) {
+            <div class="article-preview">
+              <span class="category">{{ article.category }}</span>
+              <h3>{{ article.title }}</h3>
+              <p>{{ article.excerpt }}</p>
+              <span class="date">{{ article.date }}</span>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+</div>

@@ -1,0 +1,35 @@
+{
+  "name": "fetchxrates",
+  "version": "1.0.0",
+  "description": "fetchxrates - Reliable REST API for RBA Exchange Rates",
+  "private": true,
+  "scripts": {
+    "start": "ng serve",
+    "start:ssl": "ng serve --configuration ssl",
+    "build": "ng build",
+    "build:prod": "ng build --configuration production",
+    "watch": "ng build --watch --configuration development"
+  },
+  "dependencies": {
+    "@angular/cdk": "^20.2.14",
+    "@angular/common": "^20.3.0",
+    "@angular/core": "^20.3.0",
+    "@angular/forms": "^20.3.0",
+    "@angular/material": "^20.2.14",
+    "@angular/platform-browser": "^20.3.0",
+    "@angular/router": "^20.3.0",
+    "rxjs": "~7.8.0",
+    "tslib": "^2.6.0",
+    "zone.js": "~0.15.1"
+  },
+  "devDependencies": {
+    "@angular/build": "^20.3.0",
+    "@angular/cli": "^21.1.3",
+    "@angular/compiler": "^20.3.0",
+    "@angular/compiler-cli": "^20.3.0",
+    "typescript": "~5.8.3"
+  },
+  "overrides": {
+    "vite": "^7.1.5"
+  }
+}

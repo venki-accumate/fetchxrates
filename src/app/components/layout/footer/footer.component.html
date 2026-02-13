@@ -1,0 +1,67 @@
+<footer class="footer">
+  <div class="container">
+    <div class="footer-content">
+      <div class="footer-grid">
+        <div class="footer-brand">
+          <h3 class="brand-name">
+            <span class="brand-part brand-fetch">Fetch</span><img src="assets/textLogo.png" alt="X" class="brand-logo-image"><span class="brand-part brand-rates">ates</span>
+          </h3>
+          <p class="brand-tagline">
+            Fast, reliable FX data API with Dashboard tools for finance teams.
+            Trusted public data sources for compliance and accuracy.
+          </p>
+          <p class="trust-indicators">
+            End-to-end encrypted • Audit-friendly • Built for finance teams
+          </p>
+        </div>
+
+        <div class="footer-links">
+          <div class="link-group">
+            <h4>Product</h4>
+            <ul>
+              @for (link of footerLinks.product; track link.path) {
+                <li><a [routerLink]="link.path">{{ link.label }}</a></li>
+              }
+            </ul>
+          </div>
+
+          <div class="link-group">
+            <h4>Company</h4>
+            <ul>
+              @for (link of footerLinks.company; track link.path) {
+                <li><a [routerLink]="link.path">{{ link.label }}</a></li>
+              }
+            </ul>
+          </div>
+
+          <div class="link-group">
+            <h4>Legal</h4>
+            <ul>
+              @for (link of footerLinks.legal; track link.path) {
+                <li><a [routerLink]="link.path">{{ link.label }}</a></li>
+              }
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="footer-bottom">
+        <div class="disclaimer">
+          <p class="disclaimer-title">Data & Disclaimer</p>
+          <p class="disclaimer-text">Exchange rate data is sourced from publicly available <strong>central bank publications.</strong>
+This service is independent and not affiliated with or endorsed by any central bank. Rates are provided for informational purposes only and do not constitute financial advice. Availability may vary due to publication schedules, weekends, and public holidays.
+          </p>
+        </div>
+
+        <div class="copyright">
+          <p class="copyright-text">&copy; {{ currentYear }} Fintomate Pty Ltd. FetchXRates is a product of Fintomate Pty Ltd. All rights reserved.</p>
+          <div class="legal-links">
+            <a [routerLink]="'/terms'">Terms of Use</a>
+            <a [routerLink]="'/privacy'">Privacy Policy</a>
+            <a [routerLink]="'/cookies'">Cookies</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</footer>

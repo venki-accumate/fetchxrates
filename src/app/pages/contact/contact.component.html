@@ -1,0 +1,113 @@
+<div class="contact-page">
+  <section class="hero">
+    <div class="container">
+      <h1>Get in Touch</h1>
+      <p class="subtitle">Have questions? We'd love to hear from you. Send us a message and we'll respond as soon as possible.</p>
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <div class="contact-grid">
+        <div class="contact-info">
+          <h2>Contact Information</h2>
+          <p>Choose your preferred way to reach us. We typically respond within 24 hours.</p>
+          
+          <div class="contact-methods">
+            <div class="contact-method">
+              <div class="method-icon">📧</div>
+              <h3>Email</h3>
+              <p><a href="mailto:support@fetchxrates.com.au">support&#64;fetchxrates.com.au</a></p>
+              <span class="response-time">Response within 24 hours</span>
+            </div>
+
+            <div class="contact-method">
+              <div class="method-icon">💬</div>
+              <h3>Support</h3>
+              <p>For technical support and API questions</p>
+              <span class="response-time">Paid plans: Priority support</span>
+            </div>
+
+            <div class="contact-method">
+              <div class="method-icon">📊</div>
+              <h3>Sales</h3>
+              <p>For enterprise and custom solutions</p>
+              <span class="response-time">Contact us for pricing</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="contact-form-wrapper">
+          @if (!submitted) {
+            <form class="contact-form" (ngSubmit)="onSubmit()" #contactForm="ngForm">
+              <div class="form-group">
+                <label for="name">Name *</label>
+                <input 
+                  type="text" 
+                  id="name" 
+                  name="name" 
+                  [(ngModel)]="formData.name" 
+                  required
+                  placeholder="Your full name">
+              </div>
+
+              <div class="form-group">
+                <label for="email">Email *</label>
+                <input 
+                  type="email" 
+                  id="email" 
+                  name="email" 
+                  [(ngModel)]="formData.email" 
+                  required
+                  placeholder="your.email@example.com">
+              </div>
+
+              <div class="form-group">
+                <label for="subject">Subject *</label>
+                <input 
+                  type="text" 
+                  id="subject" 
+                  name="subject" 
+                  [(ngModel)]="formData.subject" 
+                  required
+                  placeholder="Brief description of your inquiry">
+              </div>
+
+              <div class="form-group">
+                <label for="message">Message *</label>
+                <textarea 
+                  id="message" 
+                  name="message" 
+                  [(ngModel)]="formData.message" 
+                  required
+                  rows="6"
+                  placeholder="Tell us more about your needs..."></textarea>
+              </div>
+
+              <app-button 
+                type="submit" 
+                [variant]="'primary'" 
+                [size]="'lg'"
+                [disabled]="!contactForm.valid"
+                style="width: 100%">
+                Send Message
+              </app-button>
+            </form>
+          } @else {
+            <div class="success-message">
+              <div class="success-icon">✓</div>
+              <h3>Message Sent!</h3>
+              <p>Thank you for contacting us. We'll get back to you within 24 hours.</p>
+              <app-button 
+                [variant]="'outline'" 
+                [size]="'md'"
+                (click)="submitted = false">
+                Send Another Message
+              </app-button>
+            </div>
+          }
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
