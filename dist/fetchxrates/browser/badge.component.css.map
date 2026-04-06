@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["src/app/components/shared/badge/badge.component.scss"],
-  "sourcesContent": [".badge {\n  display: inline-flex;\n  align-items: center;\n  gap: 0.375rem;\n  padding: 0.25rem 0.75rem;\n  border-radius: 9999px;\n  font-weight: 500;\n  font-size: 0.75rem;\n  white-space: nowrap;\n}\n\n.badge-sm {\n  padding: 0.125rem 0.5rem;\n  font-size: 0.6875rem;\n}\n\n.badge-md {\n  padding: 0.25rem 0.75rem;\n  font-size: 0.75rem;\n}\n\n.badge-lg {\n  padding: 0.5rem 1.25rem;\n  font-size: 1rem;\n}\n\n.badge-success {\n  background-color: rgba(16, 185, 129, 0.1);\n  color: var(--success);\n}\n\n.badge-warning {\n  background-color: rgba(245, 158, 11, 0.1);\n  color: var(--warning);\n}\n\n.badge-info {\n  background-color: rgba(37, 99, 235, 0.1);\n  color: var(--accent);\n}\n\n.badge-danger {\n  background-color: rgba(239, 68, 68, 0.1);\n  color: var(--danger);\n}\n\n.badge-default {\n  background-color: var(--bg-secondary);\n  color: var(--text-secondary);\n}\n"],
-  "mappings": ";AAAA,CAAA;AACE,WAAA;AACA,eAAA;AACA,OAAA;AACA,WAAA,QAAA;AACA,iBAAA;AACA,eAAA;AACA,aAAA;AACA,eAAA;;AAGF,CAAA;AACE,WAAA,SAAA;AACA,aAAA;;AAGF,CAAA;AACE,WAAA,QAAA;AACA,aAAA;;AAGF,CAAA;AACE,WAAA,OAAA;AACA,aAAA;;AAGF,CAAA;AACE,oBAAA,KAAA,EAAA,EAAA,GAAA,EAAA,GAAA,EAAA;AACA,SAAA,IAAA;;AAGF,CAAA;AACE,oBAAA,KAAA,GAAA,EAAA,GAAA,EAAA,EAAA,EAAA;AACA,SAAA,IAAA;;AAGF,CAAA;AACE,oBAAA,KAAA,EAAA,EAAA,EAAA,EAAA,GAAA,EAAA;AACA,SAAA,IAAA;;AAGF,CAAA;AACE,oBAAA,KAAA,GAAA,EAAA,EAAA,EAAA,EAAA,EAAA;AACA,SAAA,IAAA;;AAGF,CAAA;AACE,oBAAA,IAAA;AACA,SAAA,IAAA;;",
-  "names": []
-}
