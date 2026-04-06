@@ -1,5 +1,6 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 import { ButtonComponent } from '../../shared/button/button.component';
 
 @Component({
@@ -9,4 +10,14 @@ import { ButtonComponent } from '../../shared/button/button.component';
   templateUrl: './hero.component.html',
   styleUrl: './hero.component.scss'
 })
-export class HeroComponent {}
+export class HeroComponent {
+  constructor(private router: Router) {}
+
+  navigateToSignup(): void {
+    window.location.href = 'https://app.fetchxrates.com/signup';
+  }
+
+  navigateToFeatures(): void {
+    this.router.navigate(['/features']);
+  }
+}

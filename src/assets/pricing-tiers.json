@@ -1,103 +1,129 @@
 {
   "pricing": {
-    "monthly": [10, 34, 68],
-    "yearly": [100, 340, 680]
+    "monthly": [6, 12, 21],
+    "yearly": [60, 120, 210]
   },
-  "tiers": {
-    "dashboard": [
-      {
-        "name": "Basic",
-        "description": "Perfect for individual users managing personal finances",
-        "popular": false,
-        "features": [
-          "Single user dashboard access",
-          "10,000 data points per month",
-          "Basic reporting tools",
-          "Email support",
-          "Mobile responsive interface"
-        ],
-        "cta": "Get started",
-        "id": "basic-dashboard"
-      },
-      {
-        "name": "Professional",
-        "description": "Ideal for small teams collaborating on financial data",
-        "popular": true,
-        "badgeText": "RECOMMENDED",
-        "features": [
-          "Up to 5 user dashboard access",
-          "200,000 data points per month",
-          "Advanced analytics & charts",
-          "Priority support",
-          "Custom dashboard widgets",
-          "Export to Excel/CSV"
-        ],
-        "cta": "Get started",
-        "id": "professional-dashboard"
-      },
-      {
-        "name": "Business",
-        "description": "Enterprise solution for large organizations",
-        "popular": false,
-        "features": [
-          "Unlimited user dashboard access",
-          "600,000 data points per month",
-          "White-label dashboard options",
-          "Dedicated account manager",
-          "Custom integrations",
-          "99.9% uptime SLA"
-        ],
-        "cta": "Get started",
-        "id": "business-dashboard"
-      }
-    ],
-    "restapi": [
-      {
-        "name": "Basic",
-        "description": "For small applications and startups",
-        "popular": false,
-        "features": [
-          "10,000 API requests per month",
-          "Latest + historical rates",
-          "RBA data source",
-          "Base currency - AUD",
-          "Email support",
-          "Full API documentation"
-        ],
-        "cta": "Get started",
-        "id": "basic-api"
-      },
-      {
-        "name": "Professional",
-        "description": "For growing businesses with higher volume",
-        "popular": true,
-        "badgeText": "RECOMMENDED",
-        "features": [
-          "200,000 API requests per month",
-          "Multiple data sources (RBA, ECB)",
-          "Base Currency choice of AUD or EUR",
-          "Batch requests",
-          "Priority support",
-          "Advanced analytics"
-        ],
-        "cta": "Get started",
-        "id": "professional-api"
-      },
-      {
-        "name": "Business",
-        "description": "For established companies with large-scale needs",
-        "popular": false,
-        "features": [
-          "600,000 API requests per month",
-          "All data sources (RBA, ECB, Fed, BOE)",
-          "Base Currency: AUD, EUR, GBP, USD",
-          "Dedicated account manager",
-          "99.9% uptime SLA",
-          "Custom integration support"
-        ],
-        "cta": "Get started",
-        "id": "business-api"
-      }
-    ]
-  }
+  "tiers": [
+    {
+      "name": "Starter",
+      "description": "For individuals and light finance workflows",
+      "popular": false,
+      "features": [
+        "2,000 requests per month",
+        "15,000 data points per month",
+        "Excel Conversion: up to 500 rows per request",
+        "Time Series: up to 1 year range, up to 3 currencies per request",
+        "Statistics: same limits as time series",
+        "Scheduler: up to 2 active schedules, up to 3 currencies per schedule",
+        "Full API access included",
+        "Secure HTTPS access",
+        "Privacy-focused data handling",
+        "All other standard features included"
+      ],
+      "cta": "Get started",
+      "id": "starter"
+    },
+    {
+      "name": "Growth",
+      "description": "For growing teams and production usage",
+      "popular": true,
+      "badgeText": "MOST POPULAR",
+      "features": [
+        "10,000 requests per month",
+        "200,000 data points per month",
+        "Excel Conversion: up to 2,000 rows per request",
+        "Time Series: up to 3 year range, up to 10 currencies per request",
+        "Statistics: same limits as time series",
+        "Scheduler: up to 5 active schedules, up to 10 currencies per schedule",
+        "Early access to latest published rates",
+        "Full API access included",
+        "Secure HTTPS access",
+        "Privacy-focused data handling",
+        "All other standard features included"
+      ],
+      "cta": "Get started",
+      "id": "growth"
+    },
+    {
+      "name": "Professional",
+      "description": "For high-volume workloads and advanced automation",
+      "popular": false,
+      "features": [
+        "20,000 requests per month",
+        "1,000,000 data points per month",
+        "Excel Conversion: up to 20,000 rows per request",
+        "Time Series: up to 5 year range, up to 20 currencies per request",
+        "Statistics: same limits as time series",
+        "Scheduler: up to 10 active schedules, up to 20 currencies per schedule",
+        "Early access to latest published rates",
+        "Full API access included",
+        "Secure HTTPS access",
+        "Privacy-focused data handling",
+        "All other standard features included"
+      ],
+      "cta": "Get started",
+      "id": "professional"
+    }
+  ],
+  "notes": [
+    "1 data point = 1 currency × 1 date"
+  ],
+  "comparison": [
+    { 
+      "label": "REST API Access", 
+      "description": "Access exchange rates programmatically via REST APIs for integration into your applications.", 
+      "highlight": true, 
+      "values": ["check", "check", "check"] 
+    },
+    { 
+      "label": "Dashboard Access", 
+      "description": "Use the web dashboard to upload files, run conversions, and download results.", 
+      "values": ["check", "check", "check"] 
+    },
+    { 
+      "label": "Requests / month", 
+      "description": "Total number of API requests allowed per month across all endpoints.", 
+      "values": ["2,000", "10,000", "20,000"] 
+    },
+    { 
+      "label": "Data points / month", 
+      "description": "Total number of currency data points processed. 1 data point = 1 currency per trading day", 
+      "values": ["15,000", "200,000", "1,000,000"] 
+    },
+    { 
+      "label": "Currencies per request", 
+      "description": "Number of target currencies you can convert to in a single request.", 
+      "values": ["3", "10", "20"] 
+    },
+    { 
+      "label": "Excel Conversion", 
+      "description": "Maximum number of rows supported per file upload for currency conversion.", 
+      "values": ["500 rows per request", "2,000 rows per request", "20,000 rows per request"] 
+    },
+    { 
+      "label": "Time Series Range", 
+      "description": "Maximum historical date range allowed per request.", 
+      "values": ["1 year interval", "3 year interval", "5 year interval"] 
+    },
+    { 
+      "label": "Active Schedules", 
+      "description": "Number of automated scheduled jobs you can run (daily, weekly, monthly exports).", 
+      "values": ["2", "5", "10"] 
+    },
+    { 
+      "label": "Central bank(s) rate delivery", 
+      "description": "Get the full exchange rate dataset delivered directly as soon as central banks publish it.", 
+      "values": ["none", "check", "check"] 
+    },
+    { 
+      "label": "Secure HTTPS Access", 
+      "description": "All data is transmitted securely over encrypted HTTPS connections.", 
+      "values": ["check", "check", "check"] 
+    },
+    { 
+      "label": "Data Privacy", 
+      "description": "We don’t transmit or store your financial data — only amount values are processed and updated securely.", 
+      "values": ["check", "check", "check"] 
+    }
+  ]
 }

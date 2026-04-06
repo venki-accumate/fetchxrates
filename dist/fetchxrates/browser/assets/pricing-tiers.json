@@ -1,0 +1,88 @@
+{
+  "pricing": {
+    "dashboard": {
+      "monthly": [5, 15],
+      "yearly": [55, 155]
+    },
+    "restapi": {  
+      "monthly": [10, 19],
+      "yearly": [105, 200]
+    }
+  },
+  "tiers": {
+    "dashboard": [
+      {
+        "name": "Basic",
+        "description": "For individuals and light finance workflows",
+        "popular": false,
+        "features": [
+          "500 requests per month",
+          "50,000 data points per month",
+          "Up to 5 parallel currencies per request",
+          "Dashboard access",
+          "Usage tracking and history",
+          "Export to Excel and CSV",
+          "Email support",
+          "All standard features included"
+        ],
+        "cta": "Get started",
+        "id": "basic_dashboard"
+      },
+      {
+        "name": "Professional",
+        "description": "For heavier usage and growing finance teams",
+        "popular": true,
+        "badgeText": "RECOMMENDED",
+        "features": [
+          "4,000 requests per month",
+          "400,000 data points per month",
+          "Up to 20 parallel currencies per request",
+          "Advanced analytics and charts",
+          "Custom dashboard widgets",
+          "Priority support",
+          "Faster processing for larger workloads",
+          "All standard features included"
+        ],
+        "cta": "Get started",
+        "id": "professional_dashboard"
+      }
+    ],
+    "restapi": [
+      {
+        "name": "Basic",
+        "description": "For developers, startups, and smaller integrations",
+        "popular": false,
+        "features": [
+          "1,500 API requests per month",
+          "200,000 data points per month",
+          "Latest and historical rates",
+          "Batch requests",
+          "Full API documentation",
+          "Email support",
+          "Secure API access",
+          "All standard features included"
+        ],
+        "cta": "Get started",
+        "id": "basic_api"
+      },
+      {
+        "name": "Professional",
+        "description": "For production workloads and higher-volume automation",
+        "popular": true,
+        "badgeText": "RECOMMENDED",
+        "features": [
+          "6,000 API requests per month",
+          "600,000 data points per month",
+          "Higher throughput for automation",
+          "Batch requests",
+          "Priority support",
+          "Production-ready usage limits",
+          "Full API documentation",
+          "All standard features included"
+        ],
+        "cta": "Get started",
+        "id": "professional_api"
+      }
+    ]
+  }
+}

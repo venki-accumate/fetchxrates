@@ -12,7 +12,7 @@
           <a routerLink="/" routerLinkActive="active" [routerLinkActiveOptions]="{exact: true}" (click)="closeMobileMenu()">Home</a>
           <a routerLink="/features" routerLinkActive="active" (click)="closeMobileMenu()">Features</a>
           <a routerLink="/pricing" routerLinkActive="active" (click)="closeMobileMenu()">Pricing</a>
-          <span class="nav-link-disabled" title="Coming Soon">API Spec<span class="coming-soon">Soon</span></span>
+          <a routerLink="/api-spec" routerLinkActive="active" (click)="closeMobileMenu()">API Docs</a>
           <span class="nav-link-disabled" title="Coming Soon">Contact<span class="coming-soon">Soon</span></span>
         </div>
       </div>
@@ -39,7 +39,7 @@
         </button>
 
         <app-button variant="outline" size="sm" (click)="navigateToLogin()">Login</app-button>
-        <app-button variant="primary" size="sm" class="cta-btn">Get Started</app-button>
+        <app-button variant="primary" size="sm" (click)="navigateToSignup()" class="cta-btn">Get Started</app-button>
 
         <button class="mobile-menu-btn" (click)="toggleMobileMenu()" aria-label="Toggle menu">
           <span class="hamburger" [class.open]="mobileMenuOpen()"></span>

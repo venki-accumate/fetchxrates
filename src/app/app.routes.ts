@@ -26,6 +26,10 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/contact/contact.component').then(m => m.ContactComponent)
   },
   {
+    path: 'api-spec',
+    loadComponent: () => import('./pages/api-spec/api-spec.component').then(m => m.ApiSpecComponent)
+  },
+  {
     path: 'status',
     loadComponent: () => import('./pages/status/status.component').then(m => m.StatusComponent)
   },

@@ -113,45 +113,4 @@
 </section>
 
 <!-- Pricing -->
-<section class="pricing section">
-  <div class="container">
-    <div class="section-header text-center">
-      <h2>Simple, Transparent Pricing</h2>
-      <p>Choose the plan that fits your needs</p>
-    </div>
-    
-    <div class="pricing-grid">
-      @for (tier of pricingTiers; track tier.name) {
-        <div class="pricing-card" [attr.data-tier]="tier.name.toLowerCase()">
-          @if (tier.badgeText) {
-            <div class="recommendation-badge">
-              {{ tier.badgeText }}
-            </div>
-          }
-          
-          <h3>{{ tier.name }}</h3>
-          <div class="price">
-            <span class="amount">{{ tier.price }}</span>
-            <span class="period">{{ tier.period }}</span>
-          </div>
-          <p class="description">{{ tier.description }}</p>
-          
-          <ul class="features-list">
-            @for (feature of tier.features; track feature) {
-              <li>
-                <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path d="M16.6667 5L7.50004 14.1667L3.33337 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                </svg>
-                {{ feature }}
-              </li>
-            }
-          </ul>
-          
-          <button class="select-button">
-            {{ tier.cta }}
-          </button>
-        </div>
-      }
-    </div>
-  </div>
-</section>
+<app-pricing [embedded]="true"></app-pricing>

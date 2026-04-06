@@ -54,4 +54,10 @@ export class NavbarComponent {
       window.location.href = 'https://localhost:4200/login';
     }
   }
+
+  navigateToSignup(): void {
+    if (typeof window !== 'undefined') {
+      window.location.href = 'https://localhost:4200/signup';
+    }
+  }
 }

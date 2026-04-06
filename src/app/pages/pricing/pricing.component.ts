@@ -1,25 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { HttpClient, provideHttpClient } from '@angular/common/http';
-import { MatTabsModule } from '@angular/material/tabs';
 import { ButtonComponent } from '../../components/shared/button/button.component';
 
 @Component({
   selector: 'app-pricing',
   standalone: true,
-  imports: [CommonModule, RouterLink, ButtonComponent, MatTabsModule],
+  imports: [CommonModule, RouterLink, ButtonComponent],
   templateUrl: './pricing.component.html',
   styleUrl: './pricing.component.scss'
 })
 export class PricingComponent implements OnInit {
+  @Input() embedded = false;
+
   pricingTiers: any[] = [];
+  comparisonRows: any[] = [];
   billingCycle: 'monthly' | 'yearly' = 'monthly';
-  tierType: 'dashboard' | 'restapi' = 'dashboard';
-  selectedTabIndex: number = 0;
   monthlyPrices: number[] = [];
   yearlyPrices: number[] = [];
-  allTiers: any = {};
 
   constructor(private http: HttpClient) {}
 
@@ -28,8 +27,8 @@ export class PricingComponent implements OnInit {
       next: (data) => {
         this.monthlyPrices = data.pricing.monthly;
         this.yearlyPrices = data.pricing.yearly;
-        this.allTiers = data.tiers;
-        this.pricingTiers = data.tiers.dashboard;
+        this.pricingTiers = data.tiers;
+        this.comparisonRows = data.comparison ?? [];
       },
       error: (error) => {
         console.error('Error loading pricing tiers:', error);
@@ -77,17 +76,6 @@ export class PricingComponent implements OnInit {
     this.billingCycle = cycle;
   }
 
-  switchTierType(type: 'dashboard' | 'restapi'): void {
-    this.tierType = type;
-    this.pricingTiers = this.allTiers[type];
-    this.selectedTabIndex = type === 'dashboard' ? 0 : 1;
-  }
-
-  onTabChange(index: number): void {
-    const type = index === 0 ? 'dashboard' : 'restapi';
-    this.switchTierType(type);
-  }
-
   getPrice(index: number): number {
     return this.billingCycle === 'monthly' 
       ? this.monthlyPrices[index] 
@@ -95,10 +83,8 @@ export class PricingComponent implements OnInit {
   }
 
   selectPlan(tier: any): void {
-    console.log('Selected plan:', tier);
-    console.log(typeof window);
     if (typeof window !== 'undefined') {
-      window.location.href = 'https://localhost:4200/signup';
+      window.location.href = `https://localhost:4200/signup/${tier.id}`;
     }
   }
 

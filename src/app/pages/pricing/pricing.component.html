@@ -1,134 +1,139 @@
 <div class="pricing-page">
+
   <section class="hero">
     <div class="container">
-      <h1>Simple, Transparent Pricing</h1>
-      <p class="subtitle">Choose the plan that fits your needs. All plans include access to our full API and 21 currencies.</p>
-      
+        <h1>Fetchxrates Pricing Plans</h1>
+
+      <p class="subtitle"><b>Save 17%</b> with <b>annual billing</b></p>
+      <p class="subtitle"><b>Prices in USD.</b> Charged in local currency at checkout.</p>
+      <p class="subtitle">Try it risk-free — <b>cancel within 7 days for a full refund.</b></p>
       <!-- Billing Cycle Toggle -->
-      <div class="billing-toggle">
-        <button 
-          class="toggle-btn" 
-          [class.active]="billingCycle === 'monthly'"
-          (click)="toggleBillingCycle('monthly')">
-          Pay monthly
-        </button>
-        <button 
-          class="toggle-btn" 
-          [class.active]="billingCycle === 'yearly'"
-          (click)="toggleBillingCycle('yearly')">
-          Pay yearly <span class="savings-badge">save 17%</span>
-        </button>
-      </div>
-    </div>
-  </section>
-
-  <section class="section">
-    <div class="container">
-      <!-- Tier Type Tabs wrapping pricing cards -->
-      <mat-tab-group class="pricing-tabs" [selectedIndex]="selectedTabIndex" (selectedIndexChange)="onTabChange($event)">
-        <mat-tab label="Dashboard Tier">
-          <div class="pricing-grid">
-            @for (tier of pricingTiers; track tier.id; let i = $index) {
-              <div class="pricing-card" [class.popular]="tier.popular" [attr.data-tier]="tier.name.toLowerCase()">
-                @if (tier.badgeText) {
-                  <div class="recommendation-badge">
-                    {{ tier.badgeText }}
-                  </div>
-                }
-                <h3>{{ tier.name }}</h3>
-                <div class="price">
-                  <span class="amount">${{ getPrice(i) }}</span>
-                  <span class="period">/{{ billingCycle === 'monthly' ? 'month' : 'year' }}</span>
-                </div>
-                <p class="description">{{ tier.description }}</p>
-                <ul class="features-list">
-                  @for (feature of tier.features; track feature) {
-                    <li>
-                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16.6667 5L7.50004 14.1667L3.33337 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                      {{ feature }}
-                    </li>
-                  }
-                </ul>
-                <button class="select-button" (click)="selectPlan(tier)">
-                  {{ tier.cta }}
-                </button>
-              </div>
-            }
-          </div>
-        </mat-tab>
-        <mat-tab label="REST API Tier">
-          <div class="pricing-grid">
-            @for (tier of pricingTiers; track tier.id; let i = $index) {
-              <div class="pricing-card" [class.popular]="tier.popular" [attr.data-tier]="tier.name.toLowerCase()">
-                @if (tier.badgeText) {
-                  <div class="recommendation-badge">
-                    {{ tier.badgeText }}
-                  </div>
-                }
-                <h3>{{ tier.name }}</h3>
-                <div class="price">
-                  <span class="amount">${{ getPrice(i) }}</span>
-                  <span class="period">/{{ billingCycle === 'monthly' ? 'month' : 'year' }}</span>
-                </div>
-                <p class="description">{{ tier.description }}</p>
-                <ul class="features-list">
-                  @for (feature of tier.features; track feature) {
-                    <li>
-                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M16.6667 5L7.50004 14.1667L3.33337 10" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-                      </svg>
-                      {{ feature }}
-                    </li>
-                  }
-                </ul>
-                <button class="select-button" (click)="selectPlan(tier)">
-                  {{ tier.cta }}
-                </button>
-              </div>
-            }
-          </div>
-        </mat-tab>
-      </mat-tab-group>
-    </div>
-  </section>
-
-  <section class="section faq-section">
-    <div class="container">
-      <div class="section-header">
-        <h2>Frequently Asked Questions</h2>
-        <p>Have questions about pricing? We're here to help.</p>
-      </div>
-      <div class="faq-list">
-        @for (faq of faqs; track faq.question; let i = $index) {
-          <div class="faq-item" [class.open]="faq.open">
-            <button class="faq-question" (click)="toggleFAQ(i)">
-              <span>{{ faq.question }}</span>
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
-              </svg>
-            </button>
-            <div class="faq-answer">
-              <p>{{ faq.answer }}</p>
-            </div>
-          </div>
-        }
-      </div>
-    </div>
-  </section>
-
-  <section class="section cta">
-    <div class="container">
-      <div class="cta-content">
-        <h2>Still have questions?</h2>
-        <p>Contact our sales team to discuss custom plans or enterprise solutions.</p>
-        <div class="cta-actions">
-          <app-button [variant]="'primary'" [size]="'lg'">
-            <a routerLink="/contact" style="color: white; text-decoration: none;">Contact Sales</a>
-          </app-button>
+      <div class="billing-toggle-row">
+        <div class="billing-toggle">
+          <button 
+            class="toggle-btn" 
+            [class.active]="billingCycle === 'monthly'"
+            (click)="toggleBillingCycle('monthly')">
+            Pay monthly
+          </button>
+          <button 
+            class="toggle-btn" 
+            [class.active]="billingCycle === 'yearly'"
+            (click)="toggleBillingCycle('yearly')">
+            Pay yearly <span class="savings-badge">save 17%</span>
+          </button>
         </div>
       </div>
+      <!-- Unified Pricing + Features Grid -->
+      @if (pricingTiers.length) {
+        <div class="unified-pricing-wrap">
+          <table class="unified-pricing-table">
+            <!-- Tier Header Row -->
+            <thead>
+              <tr class="tier-header-row">
+                <th class="feature-col"></th>
+                @for (tier of pricingTiers; track tier.id; let i = $index) {
+                  <th class="tier-col" [class.popular-col]="tier.popular">
+                    @if (tier.badgeText) {
+                      <span class="tier-badge">{{ tier.badgeText }}</span>
+                    }
+                    <div class="tier-header">
+                      <h3 class="tier-name">{{ tier.name }}</h3>
+                      <p class="tier-desc">{{ tier.description }}</p>
+                      <div class="tier-price">
+                        <span class="currency">$</span>
+                        <span class="amount">{{ getPrice(i) }}</span>
+                        <span class="period">/{{ billingCycle === 'monthly' ? 'month' : 'year' }}</span>
+                      </div>
+                      @if (billingCycle === 'yearly') {
+                        <p class="price-note">Billed annually</p>
+                      }
+                      <button class="select-button" [class.primary]="tier.popular" (click)="selectPlan(tier)">
+                        {{ tier.cta }}
+                      </button>
+                    </div>
+                  </th>
+                }
+              </tr>
+            </thead>
+            <!-- Feature Comparison Rows -->
+            <tbody>
+              @for (row of comparisonRows; track row.label) {
+                <tr [class.highlight-row]="row.highlight">
+                  <td class="feature-name">
+                    <span class="feature-label">{{ row.label }}</span>
+                    @if (row.description) {
+                      <span class="feature-tooltip-trigger" tabindex="0" aria-label="More information">
+                        <svg class="info-icon" width="14" height="14" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+                          <circle cx="10" cy="10" r="8" stroke="currentColor" stroke-width="1.6"/>
+                          <path d="M10 8V13" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"/>
+                          <circle cx="10" cy="5.8" r="1" fill="currentColor"/>
+                        </svg>
+                        <span class="feature-tooltip">{{ row.description }}</span>
+                      </span>
+                    }
+                  </td>
+                  @for (val of row.values; track $index) {
+                    <td class="feature-value" [class.popular-col]="pricingTiers[$index]?.popular">
+                      @if (val === 'check') {
+                        <svg class="check-icon" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                          <path d="M16.6667 5L7.50004 14.1667L3.33337 10" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      } @else if (val === 'none') {
+                        <svg class="cross-icon" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                          <path d="M14 4L4 14M4 4L14 14" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                      } @else {
+                        <span class="text-value">{{ val }}</span>
+                      }
+                    </td>
+                  }
+                </tr>
+              }
+            </tbody>
+          </table>
+        </div>
+      }
     </div>
   </section>
+
+  @if (!embedded) {
+    <section class="section faq-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Frequently Asked Questions</h2>
+          <p>Have questions about pricing? We're here to help.</p>
+        </div>
+        <div class="faq-list">
+          @for (faq of faqs; track faq.question; let i = $index) {
+            <div class="faq-item" [class.open]="faq.open">
+              <button class="faq-question" (click)="toggleFAQ(i)">
+                <span>{{ faq.question }}</span>
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M6 9L12 15L18 9" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </button>
+              <div class="faq-answer">
+                <p>{{ faq.answer }}</p>
+              </div>
+            </div>
+          }
+        </div>
+      </div>
+    </section>
+
+    <section class="section cta">
+      <div class="container">
+        <div class="cta-content">
+          <h2>Still have questions?</h2>
+          <p>Contact our sales team to discuss custom plans or enterprise solutions.</p>
+          <div class="cta-actions">
+            <app-button [variant]="'primary'" [size]="'lg'">
+              <a routerLink="/contact" style="color: white; text-decoration: none;">Contact Sales</a>
+            </app-button>
+          </div>
+        </div>
+      </div>
+    </section>
+  }
 </div>

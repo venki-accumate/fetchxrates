@@ -1,0 +1,517 @@
+<div class="api-spec-page">
+
+  <!-- PAGE HEADER -->
+  <div class="api-page-header">
+    <div class="api-page-header__inner">
+      <div class="api-page-header__brand">
+        <span class="material-icons">api</span>
+        <span class="api-page-header__title">FetchXRates API</span>
+        @if (docs()) {
+          <span class="api-page-header__version">v{{ docs()!.version }}</span>
+        }
+      </div>
+      <button class="postman-btn" title="Download Postman Collection — coming soon" disabled>
+        <span class="material-icons">download</span>
+        Download Postman Collection
+        <span class="postman-btn__soon">Soon</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- TWO-COLUMN BODY -->
+  <div class="api-body">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar">
+
+      <!-- Top-level nav -->
+      <div class="sidebar__section">
+        <button class="sidebar__nav-item" [class.active]="activeSection() === 'introduction'" (click)="selectSection('introduction')">
+          <span class="material-icons">menu_book</span>
+          Introduction
+        </button>
+        <button class="sidebar__nav-item" [class.active]="activeSection() === 'quickstart'" (click)="selectSection('quickstart')">
+          <span class="material-icons">flash_on</span>
+          Quickstart
+        </button>
+        <button class="sidebar__nav-item" [class.active]="activeSection() === 'authentication'" (click)="selectSection('authentication')">
+          <span class="material-icons">lock</span>
+          Authentication
+        </button>
+        <button class="sidebar__nav-item" [class.active]="activeSection() === 'important'" (click)="selectSection('important')">
+          <span class="material-icons">warning_amber</span>
+          Important Information
+        </button>
+      </div>
+
+      <!-- API Reference endpoints -->
+      <div class="sidebar__section sidebar__section--ref">
+        <div class="sidebar__ref-label">
+          <span class="material-icons">api</span>
+          API Reference
+        </div>
+        @if (docs()) {
+          @for (group of groups; track group.label) {
+            <div class="sidebar__group-label">
+              <span class="material-icons">{{ group.icon }}</span>
+              {{ group.label }}
+            </div>
+            @for (ep of getEndpointsForGroup(group); track ep.id) {
+              <button
+                class="sidebar__ep"
+                [class.active]="activeSection() === 'endpoint' && activeEndpointId() === ep.id"
+                (click)="selectEndpoint(ep.id)"
+              >
+                <span class="sidebar__ep-badge" [ngClass]="methodColor(ep.method)">{{ ep.method }}</span>
+                <span class="sidebar__ep-path">{{ ep.path }}</span>
+              </button>
+            }
+          }
+        }
+      </div>
+
+    </aside>
+
+    <!-- MAIN CONTENT (no overflow — browser scroll) -->
+    <main class="detail-panel">
+
+      <!-- ====== INTRODUCTION ====== -->
+      @if (activeSection() === 'introduction') {
+        <div class="doc-section">
+          @if (docs()) {
+            <div class="doc-section__hero">
+              <div class="doc-hero-badge">
+                <span class="material-icons">api</span> REST API
+              </div>
+              <h1>{{ docs()!.title }}</h1>
+              <p class="doc-hero-desc">{{ docs()!.description }}</p>
+              <div class="doc-hero-chips">
+                <span class="meta-chip">
+                  <span class="material-icons">tag</span> v{{ docs()!.version }}
+                </span>
+                <span class="meta-chip">
+                  <span class="material-icons">link</span> {{ docs()!.baseUrl }}
+                </span>
+                <span class="meta-chip meta-chip--auth">
+                  <span class="material-icons">lock</span> Bearer Token Auth
+                </span>
+                <span class="meta-chip">
+                  <span class="material-icons">code</span> JSON
+                </span>
+              </div>
+            </div>
+          }
+
+          <div class="intro-feature-grid">
+            <div class="intro-feature-card">
+              <span class="material-icons intro-feature-card__icon">trending_up</span>
+              <strong>Live Exchange Rates</strong>
+              <p>Real-time rates sourced from ECB, BOE, RBA, and the US Federal Reserve with up to 14-day fallback for weekends and holidays.</p>
+            </div>
+            <div class="intro-feature-card">
+              <span class="material-icons intro-feature-card__icon">currency_exchange</span>
+              <strong>Currency Conversion</strong>
+              <p>Single and bulk conversion endpoints. Convert one currency to many targets in a single API call.</p>
+            </div>
+            <div class="intro-feature-card">
+              <span class="material-icons intro-feature-card__icon">history</span>
+              <strong>Historical Data</strong>
+              <p>Query historical exchange rates for any past date — ideal for financial reporting and analysis.</p>
+            </div>
+            <div class="intro-feature-card">
+              <span class="material-icons intro-feature-card__icon">dataset</span>
+              <strong>Reference Data</strong>
+              <p>Access the full list of supported currencies, base currencies, and API metadata at any time.</p>
+            </div>
+          </div>
+
+          <div class="intro-info-table">
+            <div class="intro-info-row">
+              <span class="intro-info-key">Base URL</span>
+              <code class="intro-info-val">{{ docs()?.baseUrl }}</code>
+            </div>
+            <div class="intro-info-row">
+              <span class="intro-info-key">Version</span>
+              <code class="intro-info-val">{{ docs()?.version }}</code>
+            </div>
+            <div class="intro-info-row">
+              <span class="intro-info-key">Protocol</span>
+              <code class="intro-info-val">HTTPS</code>
+            </div>
+            <div class="intro-info-row">
+              <span class="intro-info-key">Response Format</span>
+              <code class="intro-info-val">application/json</code>
+            </div>
+            <div class="intro-info-row">
+              <span class="intro-info-key">Authentication</span>
+              <code class="intro-info-val">Bearer Token (AWS Cognito JWT)</code>
+            </div>
+          </div>
+
+          <div class="intro-cta-row">
+            <button class="btn-primary" (click)="selectSection('quickstart')">
+              <span class="material-icons">flash_on</span>
+              Get Started
+            </button>
+            <button class="btn-outline" (click)="selectEndpoint('latest')">
+              <span class="material-icons">api</span>
+              Browse API Reference
+            </button>
+          </div>
+        </div>
+      }
+
+      <!-- ====== QUICKSTART ====== -->
+      @if (activeSection() === 'quickstart') {
+        <div class="doc-section">
+          <div class="doc-section__header">
+            <h1>Quickstart</h1>
+            <p>Make your first API call in under 5 minutes.</p>
+          </div>
+
+          <div class="qs-step">
+            <div class="qs-step__num">1</div>
+            <div class="qs-step__body">
+              <h3>Sign up and get your API key</h3>
+              <p>Create an account at <strong>fetchxrates.com</strong> and subscribe to a plan. Your JWT token is available in the dashboard under <em>API Settings</em>. Tokens are issued via AWS Cognito after sign-in.</p>
+              <a class="qs-link" href="https://fetchxrates.com/pricing" target="_blank" rel="noopener">
+                <span class="material-icons">open_in_new</span> View pricing plans
+              </a>
+            </div>
+          </div>
+
+          <div class="qs-step">
+            <div class="qs-step__num">2</div>
+            <div class="qs-step__body">
+              <h3>Make your first request</h3>
+              <p>Call the <code class="inline-code">/api/latest</code> endpoint to retrieve the latest exchange rates for a base currency.</p>
+              <div class="code-col">
+                <div class="code-block-header">
+                  <span class="material-icons">terminal</span>
+                  cURL
+                </div>
+                <pre class="code-block"><code><span class="token-method">curl</span> -X <span class="token-method">GET</span> \
+  <span class="token-url">"https://uapi.fetchxrates.com/api/latest?base=USD"</span> \
+  -H <span class="token-header">"Authorization: Bearer YOUR_JWT_TOKEN"</span></code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="qs-step">
+            <div class="qs-step__num">3</div>
+            <div class="qs-step__body">
+              <h3>Handle the response</h3>
+              <p>A successful response returns <code class="inline-code">200 OK</code> with a JSON body containing the base currency, date, and rates object.</p>
+              <div class="code-col">
+                <div class="code-block-header">
+                  <span class="material-icons">output</span>
+                  Response
+                  <span class="status-pill status-2xx">200 OK</span>
+                </div>
+                <pre class="code-block"><code><span class="token-json">&#123;
+  "base": "USD",
+  "date": "2026-03-19",
+  "rates": &#123;
+    "EUR": 0.9261,
+    "GBP": 0.7916,
+    "JPY": 149.82,
+    "AUD": 1.5912,
+    "CAD": 1.3571,
+    "CHF": 0.8974
+  &#125;
+&#125;</span></code></pre>
+              </div>
+            </div>
+          </div>
+
+          <div class="qs-step">
+            <div class="qs-step__num">4</div>
+            <div class="qs-step__body">
+              <h3>Explore more endpoints</h3>
+              <p>Now that you're up and running, explore historical rates, bulk conversion, and reference data endpoints.</p>
+              <div class="qs-next-links">
+                <button class="qs-next-btn" (click)="selectSection('authentication')">
+                  <span class="material-icons">lock</span>
+                  Authentication Guide
+                </button>
+                <button class="qs-next-btn" (click)="selectEndpoint('convert')">
+                  <span class="material-icons">currency_exchange</span>
+                  Convert Currencies
+                </button>
+                <button class="qs-next-btn" (click)="selectEndpoint('history')">
+                  <span class="material-icons">history</span>
+                  Historical Rates
+                </button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      }
+
+      <!-- ====== AUTHENTICATION ====== -->
+      @if (activeSection() === 'authentication') {
+        <div class="doc-section">
+          <div class="doc-section__header">
+            <h1>Authentication</h1>
+            <p>All FetchXRates API requests require a valid Bearer token issued via AWS Cognito.</p>
+          </div>
+
+          @if (docs()) {
+            <div class="auth-info-table">
+              <div class="auth-info-row">
+                <span class="auth-info-key">Type</span>
+                <span class="auth-info-val">{{ docs()!.authentication.type }}</span>
+              </div>
+              <div class="auth-info-row">
+                <span class="auth-info-key">Header</span>
+                <code class="auth-info-code">{{ docs()!.authentication.header }}</code>
+              </div>
+              <div class="auth-info-row">
+                <span class="auth-info-key">Required</span>
+                <span class="badge-required" style="width:fit-content">Yes — all endpoints</span>
+              </div>
+            </div>
+
+            <div class="auth-note-block">
+              <span class="material-icons">info</span>
+              <p>{{ docs()!.authentication.notes }}</p>
+            </div>
+          }
+
+          <h3 class="auth-sub-heading">How to authenticate</h3>
+          <p class="auth-sub-desc">Include your JWT token in the <code class="inline-code">Authorization</code> header of every request:</p>
+
+          <div class="lang-tabs">
+            @for (lang of codeLangs; track lang) {
+              <button class="lang-tab" [class.active]="activeCodeLang() === lang" (click)="setCodeLang(lang)">
+                {{ codeLangLabels[lang] }}
+              </button>
+            }
+          </div>
+
+          <div class="code-col">
+            <div class="code-block-header">
+              <span class="material-icons">terminal</span>
+              {{ codeLangLabels[activeCodeLang()] }}
+              <button class="copy-btn copy-btn--sm" (click)="copyToClipboard(authCodeSample(activeCodeLang()), 'auth-' + activeCodeLang())">
+                <span class="material-icons">{{ copiedId() === 'auth-' + activeCodeLang() ? 'check' : 'content_copy' }}</span>
+                {{ copiedId() === 'auth-' + activeCodeLang() ? 'Copied!' : 'Copy' }}
+              </button>
+            </div>
+            <pre class="code-block"><code>{{ authCodeSample(activeCodeLang()) }}</code></pre>
+          </div>
+
+          <div class="auth-tips">
+            <h3>Token tips</h3>
+            <ul>
+              <li>Tokens are time-limited — refresh them via your Cognito session before expiry.</li>
+              <li>Never expose your token in client-side code or public repositories.</li>
+              <li>Each subscription plan has a rate limit — see your dashboard for current usage.</li>
+              <li>A <code class="inline-code">401 Unauthorized</code> response usually means your token has expired.</li>
+            </ul>
+          </div>
+
+        </div>
+      }
+
+      <!-- ====== IMPORTANT INFORMATION ====== -->
+      @if (activeSection() === 'important') {
+        <div class="doc-section">
+          <div class="doc-section__hero">
+            <span class="doc-hero-badge"><span class="material-icons">warning_amber</span> Important Information</span>
+            <h1>Rate Data Notes</h1>
+            <p class="doc-hero-desc">Key facts about how exchange rate data is sourced, computed, and updated across all API endpoints.</p>
+          </div>
+
+          @if (docs()?.rateDataNotes) {
+            <section class="notes-section">
+              <div class="notes-grid">
+                @if (docs()!.rateDataNotes!.weekendsAndHolidays) {
+                  <div class="note-card note-card--full">
+                    <span class="material-icons note-icon">event_busy</span>
+                    <div>
+                      <strong>Weekends &amp; Holidays</strong>
+                      <p>{{ docs()!.rateDataNotes!.weekendsAndHolidays }}</p>
+                    </div>
+                  </div>
+                }
+                @if (docs()!.rateDataNotes!.precision) {
+                  <div class="note-card note-card--full">
+                    <span class="material-icons note-icon">pin</span>
+                    <div>
+                      <strong>Precision</strong>
+                      <p>{{ docs()!.rateDataNotes!.precision }}</p>
+                    </div>
+                  </div>
+                }
+                @if (docs()!.rateDataNotes!.crossRates) {
+                  <div class="note-card note-card--full">
+                    <span class="material-icons note-icon">swap_horiz</span>
+                    <div>
+                      <strong>Cross-Rate Computation</strong>
+                      <p>{{ docs()!.rateDataNotes!.crossRates }}</p>
+                    </div>
+                  </div>
+                }
+                @if (docs()!.rateDataNotes!.dataSources) {
+                  <div class="note-card note-card--full">
+                    <span class="material-icons note-icon">account_balance</span>
+                    <div>
+                      <strong>Data Sources</strong>
+                      <p>{{ docs()!.rateDataNotes!.dataSources }}</p>
+                    </div>
+                  </div>
+                }
+              </div>
+            </section>
+          }
+        </div>
+      }
+
+      <!-- ====== ENDPOINT DETAIL ====== -->
+      @if (activeSection() === 'endpoint') {
+        @if (activeEndpoint(); as ep) {
+
+          <div class="ep-header">
+            <div class="ep-header__top">
+              <span class="method-badge" [ngClass]="methodColor(ep.method)">{{ ep.method }}</span>
+              <code class="ep-path">{{ ep.path }}</code>
+              <button class="copy-btn" (click)="copyToClipboard(resolveUrlPublic(ep), 'path-' + ep.id)" title="Copy full URL">
+                <span class="material-icons">{{ copiedId() === 'path-' + ep.id ? 'check' : 'content_copy' }}</span>
+              </button>
+            </div>
+            <h2 class="ep-summary">{{ ep.summary }}</h2>
+            <p class="ep-description">{{ ep.description }}</p>
+          </div>
+
+          <div class="ep-body">
+
+            <!-- Parameters -->
+            @if (ep.parameters && ep.parameters.length > 0) {
+              <section class="ep-section">
+                <h3 class="ep-section__title">
+                  <span class="material-icons">tune</span> Query Parameters
+                </h3>
+                <div class="params-table">
+                  <div class="params-table__header">
+                    <span>Name</span><span>Type</span><span>Required</span><span>Default</span><span>Description</span>
+                  </div>
+                  @for (param of ep.parameters; track param.name) {
+                    <div class="params-table__row">
+                      <span class="param-name">{{ param.name }}</span>
+                      <span class="param-type">{{ param.type }}@if (param.format) {<em class="param-format"> ({{ param.format }})</em>}</span>
+                      <span>@if (param.required) {<span class="badge-required">required</span>} @else {<span class="badge-optional">optional</span>}</span>
+                      <span class="param-default">{{ param.default ?? '—' }}</span>
+                      <span class="param-desc">{{ param.description }}</span>
+                    </div>
+                  }
+                </div>
+              </section>
+            }
+
+            <!-- Request Body -->
+            @if (ep.requestBody) {
+              <section class="ep-section">
+                <h3 class="ep-section__title">
+                  <span class="material-icons">input</span> Request Body
+                  <code class="content-type">{{ ep.requestBody.contentType }}</code>
+                </h3>
+                <div class="params-table">
+                  <div class="params-table__header params-table__header--4col">
+                    <span>Field</span><span>Type</span><span>Required</span><span>Description</span>
+                  </div>
+                  @for (entry of schemaEntries(ep.requestBody.schema); track entry[0]) {
+                    <div class="params-table__row params-table__row--4col">
+                      <span class="param-name">{{ entry[0] }}</span>
+                      <span class="param-type">{{ entry[1].type }}</span>
+                      <span>@if (entry[1].required) {<span class="badge-required">required</span>} @else {<span class="badge-optional">optional</span>}</span>
+                      <span class="param-desc">{{ entry[1].description }}</span>
+                    </div>
+                  }
+                </div>
+              </section>
+            }
+
+            <!-- Code Samples + Response -->
+            <section class="ep-section">
+              <h3 class="ep-section__title">
+                <span class="material-icons">code</span> Code Samples
+              </h3>
+
+              <div class="lang-tabs">
+                @for (lang of codeLangs; track lang) {
+                  <button class="lang-tab" [class.active]="activeCodeLang() === lang" (click)="setCodeLang(lang)">
+                    {{ codeLangLabels[lang] }}
+                  </button>
+                }
+              </div>
+
+              <div class="code-cols">
+
+                <div class="code-col">
+                  <div class="code-block-header">
+                    <span class="material-icons">terminal</span>
+                    {{ codeLangLabels[activeCodeLang()] }}
+                    <button class="copy-btn copy-btn--sm" (click)="copyToClipboard(generateCodeSample(ep, activeCodeLang()), 'code-' + ep.id)">
+                      <span class="material-icons">{{ copiedId() === 'code-' + ep.id ? 'check' : 'content_copy' }}</span>
+                      {{ copiedId() === 'code-' + ep.id ? 'Copied!' : 'Copy' }}
+                    </button>
+                  </div>
+                  <pre class="code-block"><code>{{ generateCodeSample(ep, activeCodeLang()) }}</code></pre>
+
+                  @if (ep.sampleRequestWithDate) {
+                    <div class="code-block-header code-block-header--secondary">
+                      <span class="material-icons">calendar_today</span>
+                      With optional date parameter
+                    </div>
+                    <pre class="code-block code-block--secondary"><code>{{ generateCodeSampleAlt(ep, activeCodeLang()) }}</code></pre>
+                  }
+                </div>
+
+                @if (ep.sampleResponse) {
+                  <div class="code-col">
+                    <div class="code-block-header">
+                      <span class="material-icons">output</span>
+                      Response
+                      <span class="status-pill" [ngClass]="statusColor(ep.sampleResponse.status)">
+                        {{ ep.sampleResponse.status }} OK
+                      </span>
+                      <button class="copy-btn copy-btn--sm" (click)="copyToClipboard(formatJson(ep.sampleResponse.body), 'res-' + ep.id)">
+                        <span class="material-icons">{{ copiedId() === 'res-' + ep.id ? 'check' : 'content_copy' }}</span>
+                        {{ copiedId() === 'res-' + ep.id ? 'Copied!' : 'Copy' }}
+                      </button>
+                    </div>
+                    <pre class="code-block"><code><span class="token-json">{{ formatJson(ep.sampleResponse.body) }}</span></code></pre>
+                  </div>
+                }
+
+              </div>
+            </section>
+
+            <!-- Error Responses -->
+            @if (ep.errorResponses && ep.errorResponses.length > 0) {
+              <section class="ep-section">
+                <h3 class="ep-section__title">
+                  <span class="material-icons">error_outline</span> Error Responses
+                </h3>
+                <div class="error-table">
+                  @for (err of ep.errorResponses; track err.status + err.description) {
+                    <div class="error-row">
+                      <span class="error-status" [ngClass]="statusColor(err.status)">{{ err.status }}</span>
+                      <span class="error-desc">{{ err.description }}</span>
+                    </div>
+                  }
+                </div>
+              </section>
+            }
+
+          </div>
+
+        }
+      }
+
+    </main>
+  </div>
+
+</div>

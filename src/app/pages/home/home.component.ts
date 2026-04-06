@@ -2,74 +2,16 @@ import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { HeroComponent } from '../../components/features/hero/hero.component';
-
-interface PricingTier {
-  name: string;
-  price: string;
-  period: string;
-  description: string;
-  features: string[];
-  badgeText?: string;
-  cta: string;
-}
+import { PricingComponent } from '../pricing/pricing.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [CommonModule, RouterModule, HeroComponent],
+  imports: [CommonModule, RouterModule, HeroComponent, PricingComponent],
   templateUrl: './home.component.html',
   styleUrl: './home.component.scss'
 })
 export class HomeComponent {
-  pricingTiers: PricingTier[] = [
-    {
-      name: 'Basic',
-      price: '$10',
-      period: '/month',
-      description: 'For small applications and startups',
-      features: [
-        '10,000 requests per month',
-        'Latest + historical rates',
-        'RBA data source',
-        'Base currency - AUD',
-        'Email support',
-        'Full API documentation'
-      ],
-      cta: 'Get started'
-    },
-    {
-      name: 'Professional',
-      price: '$34',
-      period: '/month',
-      description: 'For growing businesses with higher volume',
-      badgeText: 'RECOMMENDATION',
-      features: [
-        '200,000 requests per month',
-        'Multiple data sources (RBA, ECB)',
-        'Base Currency choice of AUD or EUR',
-        'Batch requests',
-        'Priority support',
-        'Advanced analytics'
-      ],
-      cta: 'Get started'
-    },
-    {
-      name: 'Business',
-      price: '$68',
-      period: '/month',
-      description: 'For established companies with large-scale needs',
-      features: [
-        '600,000 requests per month',
-        'All data sources (RBA, ECB, Fed, BOE)',
-        'Base Currency: AUD, EUR, GBP, USD',
-        'Dedicated account manager',
-        '99.9% uptime SLA',
-        'Custom integration support'
-      ],
-      cta: 'Get started'
-    }
-  ];
-
   selectedCodeTab: 'curl' | 'javascript' | 'python' | 'php' = 'curl';
   
   codeExamples: Record<'curl' | 'javascript' | 'python' | 'php', string> = {
