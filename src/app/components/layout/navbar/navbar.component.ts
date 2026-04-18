@@ -51,13 +51,13 @@ export class NavbarComponent {
 
   navigateToLogin(): void {
     if (typeof window !== 'undefined') {
-      window.location.href = 'https://localhost:4200/login';
+      window.location.href = 'https://app.fetchxrates.com/login';
     }
   }
 
   navigateToSignup(): void {
     if (typeof window !== 'undefined') {
-      window.location.href = 'https://localhost:4200/signup';
+      window.location.href = 'https://app.fetchxrates.com/signup';
     }
   }
 }

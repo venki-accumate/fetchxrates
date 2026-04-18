@@ -1,0 +1,518 @@
+{
+  "title": "FetchXRates Public API",
+  "baseUrl": "https://api.fetchxrates.com/api",
+  "version": "1.0.0",
+  "description": "Public API for exchange rates, statistics, and currency conversion. Rates are sourced from central banks including ECB, BOE, RBA, and the US Federal Reserve. All dates use YYYY-MM-DD format.",
+  "authentication": {
+    "required": true,
+    "type": "API Key + Email",
+    "headers": {
+      "x-api-key": "Your API key (fxr_...)",
+      "x-email": "The email address associated with your API key"
+    },
+    "notes": "Obtain an API key from the FetchXRates dashboard after subscribing. Both headers must be present on every request except /healthcheck and /docs."
+  },
+  "dateFormat": "YYYY-MM-DD (e.g. 2026-03-19)",
+  "dateParameters": {
+    "description": "Most endpoints accept flexible date input. Priority: start+end > date > lookbackDays > default (today only).",
+      "options": [
+      { "params": "start & end", "description": "Inclusive date range in YYYY-MM-DD format." },
+      { "params": "date", "description": "Single date in YYYY-MM-DD format." },
+      { "params": "lookbackDays", "description": "Number of calendar days to look back from today (e.g. 7, 30, 90)." },
+      { "params": "(none)", "description": "Defaults to today only (latest available date)." }
+    ]
+  },
+  "endpoints": [
+    {
+      "id": "currencies",
+      "method": "GET",
+      "path": "/api/currencies",
+      "summary": "All supported currencies",
+      "description": "Returns an array of all supported ISO 4217 currencies with their code and display name.",
+      "parameters": [],
+      "sampleRequest": {
+        "url": "GET /api/currencies"
+      },
+      "sampleResponse": {
+        "status": 200,
+        "body": [
+          { "code": "AUD", "name": "Australian Dollar" },
+          { "code": "EUR", "name": "Euro" },
+          { "code": "GBP", "name": "British Pound Sterling" },
+          { "code": "USD", "name": "United States Dollar" },
+          { "code": "SGD", "name": "Singapore Dollar" },
+          { "code": "MYR", "name": "Malaysian Ringgit" }
+        ]
+      },
+      "errorResponses": [
+        { "status": 401, "description": "Missing or invalid x-api-key or x-email header." },
+        { "status": 403, "description": "Feature not available on your current plan." },
+        { "status": 429, "description": "Monthly request limit exceeded." }
+      ]
+    },
+    {
+      "id": "base-currencies",
+      "method": "GET",
+      "path": "/api/base-currencies",
+      "summary": "Available base currencies",
+      "description": "Returns base currencies for which historical rate data is available, as an array of { code, name } objects.",
+      "parameters": [],
+      "sampleRequest": {
+        "url": "GET /api/base-currencies"
+      },
+      "sampleResponse": {
+        "status": 200,
+        "body": [
+          { "code": "AUD", "name": "Australian Dollar" },
+          { "code": "EUR", "name": "Euro" },
+          { "code": "GBP", "name": "British Pound Sterling" },
+          { "code": "USD", "name": "United States Dollar" }
+        ]
+      },
+      "errorResponses": [
+        { "status": 401, "description": "Missing or invalid x-api-key or x-email header." },
+        { "status": 403, "description": "Feature not available on your current plan." },
+        { "status": 429, "description": "Monthly request limit exceeded." }
+      ]
+    },
+    {
+      "id": "publication",
+      "method": "GET",
+      "path": "/api/publication",
+      "summary": "Published exchange rates",
+      "description": "Returns exchange rates for a base currency. When no date parameters are given, returns today's rates only. Accepts flexible date input (see dateParameters).",
+      "parameters": [
+        {
+          "name": "base",
+          "in": "query",
+          "required": true,
+          "type": "string",
+          "description": "ISO 4217 base currency code (e.g. AUD, USD, EUR)."
+        },
+        {
+          "name": "date",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "YYYY-MM-DD",
+          "description": "Single date."
+        },
+        {
+          "name": "start",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "YYYY-MM-DD",
+          "description": "Range start date (inclusive). Must be paired with end."
+        },
+        {
+          "name": "end",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "YYYY-MM-DD",
+          "description": "Range end date (inclusive). Must be paired with start."
+        },
+        {
+          "name": "lookbackDays",
+          "in": "query",
+          "required": false,
+          "type": "number",
+          "description": "Number of calendar days to look back from today."
+        },
+        {
+          "name": "to",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "description": "JSON array or comma-separated list of target currency codes. Omit for all currencies."
+        }
+      ],
+      "sampleRequest": {
+        "url": "GET /api/publication?base=AUD&date=2026-03-19"
+      },
+      "sampleResponse": {
+        "status": 200,
+        "body": {
+          "base": "AUD",
+          "start": "2026-03-19",
+          "end": "2026-03-19",
+          "data": {
+            "2026-03-19": {
+              "USD": 0.6284,
+              "SGD": 0.8482,
+              "MYR": 2.9191,
+              "EUR": 0.5813,
+              "GBP": 0.4976,
+              "JPY": 94.32
+            }
+          }
+        }
+      },
+      "sampleRequestRange": {
+        "url": "GET /api/publication?base=AUD&start=2026-03-01&end=2026-03-05&to=USD,SGD"
+      },
+      "sampleRequestLookback": {
+        "url": "GET /api/publication?base=AUD&lookbackDays=7&to=USD"
+      },
+      "errorResponses": [
+        { "status": 400, "description": "Missing required query parameter: base." },
+        { "status": 401, "description": "Missing or invalid x-api-key or x-email header." },
+        { "status": 403, "description": "Feature not available on your current plan." },
+        { "status": 404, "description": "No rate data found for the given base currency." },
+        { "status": 429, "description": "Monthly request limit exceeded." },
+        { "status": 500, "description": "Internal error reading rate data from storage." }
+      ]
+    },
+    {
+      "id": "rates",
+      "method": "GET",
+      "path": "/api/rates",
+      "summary": "Exchange rates over a date range",
+      "description": "Returns daily exchange rates for the specified target currencies. `to` is required. Same flexible date input as /publication. When no date parameters are given, returns today's rates only.",
+      "parameters": [
+        {
+          "name": "from",
+          "in": "query",
+          "required": true,
+          "type": "string",
+          "description": "ISO 4217 source currency code (e.g. AUD, USD, EUR)."
+        },
+        {
+          "name": "date",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "YYYY-MM-DD",
+          "description": "Single date."
+        },
+        {
+          "name": "start",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "YYYY-MM-DD",
+          "description": "Range start date (inclusive). Must be paired with end."
+        },
+        {
+          "name": "end",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "YYYY-MM-DD",
+          "description": "Range end date (inclusive). Must be paired with start."
+        },
+        {
+          "name": "lookbackDays",
+          "in": "query",
+          "required": false,
+          "type": "number",
+          "description": "Number of calendar days to look back from today."
+        },
+        {
+          "name": "to",
+          "in": "query",
+          "required": true,
+          "type": "string",
+          "description": "JSON array or comma-separated list of target currency codes. Required."
+        }
+      ],
+      "sampleRequest": {
+        "url": "GET /api/rates?from=AUD&start=2026-01-01&end=2026-01-03&to=SGD,MYR"
+      },
+      "sampleResponse": {
+        "status": 200,
+        "body": {
+          "from": "AUD",
+          "start": "2026-01-01",
+          "end": "2026-01-03",
+          "to": ["SGD", "MYR"],
+          "data": {
+            "2026-01-02": { "SGD": 0.8512, "MYR": 2.9214 },
+            "2026-01-03": { "SGD": 0.8496, "MYR": 2.9178 }
+          }
+        }
+      },
+      "sampleRequestLookback": {
+        "url": "GET /api/rates?from=EUR&lookbackDays=7&to=USD,GBP"
+      },
+      "errorResponses": [
+        { "status": 400, "description": "Missing required query parameter: from." },
+        { "status": 400, "description": "Missing required query parameter: to." },
+        { "status": 401, "description": "Missing or invalid x-api-key or x-email header." },
+        { "status": 403, "description": "Feature not available on your current plan." },
+        { "status": 429, "description": "Monthly request limit exceeded." },
+        { "status": 500, "description": "Internal error reading rate data from storage." }
+      ]
+    },
+    {
+      "id": "statistics",
+      "method": "GET",
+      "path": "/api/statistics",
+      "summary": "Rate statistics over a date range",
+      "description": "Computes min, max, average, median, standard deviation and data-point count for each target currency over the resolved date range. Accepts the same flexible date parameters as /rates.",
+      "parameters": [
+        {
+          "name": "from",
+          "in": "query",
+          "required": true,
+          "type": "string",
+          "description": "ISO 4217 source currency code (e.g. AUD, USD, EUR)."
+        },
+        {
+          "name": "to",
+          "in": "query",
+          "required": true,
+          "type": "string",
+          "description": "JSON array or comma-separated list of target currency codes."
+        },
+        {
+          "name": "date",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "YYYY-MM-DD",
+          "description": "Single date."
+        },
+        {
+          "name": "start",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "YYYY-MM-DD",
+          "description": "Range start date (inclusive). Must be paired with end."
+        },
+        {
+          "name": "end",
+          "in": "query",
+          "required": false,
+          "type": "string",
+          "format": "YYYY-MM-DD",
+          "description": "Range end date (inclusive). Must be paired with start."
+        },
+        {
+          "name": "lookbackDays",
+          "in": "query",
+          "required": false,
+          "type": "number",
+          "description": "Number of calendar days to look back from today."
+        }
+      ],
+      "sampleRequest": {
+        "url": "GET /api/statistics?from=AUD&to=USD,SGD&start=2026-01-01&end=2026-03-01"
+      },
+      "sampleResponse": {
+        "status": 200,
+        "body": {
+          "from": "AUD",
+          "start": "2026-01-01",
+          "end": "2026-03-01",
+          "to": ["USD", "SGD"],
+          "statistics": {
+            "USD": {
+              "min": 0.6201,
+              "max": 0.6384,
+              "avg": 0.6278,
+              "median": 0.6274,
+              "stddev": 0.0042,
+              "count": 42
+            },
+            "SGD": {
+              "min": 0.8401,
+              "max": 0.8561,
+              "avg": 0.8482,
+              "median": 0.8479,
+              "stddev": 0.0035,
+              "count": 42
+            }
+          }
+        }
+      },
+      "sampleRequestLookback": {
+        "url": "GET /api/statistics?from=EUR&to=USD&lookbackDays=90"
+      },
+      "errorResponses": [
+        { "status": 400, "description": "Missing required query parameter: from." },
+        { "status": 400, "description": "Missing required query parameter: to." },
+        { "status": 401, "description": "Missing or invalid x-api-key or x-email header." },
+        { "status": 403, "description": "Feature not available on your current plan." },
+        { "status": 429, "description": "Monthly request limit exceeded." },
+        { "status": 500, "description": "Internal error computing statistics." }
+      ]
+    },
+    {
+      "id": "convert",
+      "method": "POST",
+      "path": "/api/convert",
+      "summary": "Convert currency",
+      "description": "Converts a specified amount from one currency to one or more target currencies on a given date. When date is omitted, today's rate is used.",
+      "requestBody": {
+        "contentType": "application/json",
+        "schema": {
+          "from": { "type": "string", "required": true, "description": "Source currency code." },
+          "to": { "type": "string[]", "required": true, "description": "Array of target currency codes." },
+          "amount": { "type": "number", "required": true, "description": "Amount to convert." },
+          "date": { "type": "string", "required": false, "format": "YYYY-MM-DD", "description": "Conversion date. Defaults to today." }
+        }
+      },
+      "sampleRequest": {
+        "url": "POST /api/convert",
+        "body": {
+          "from": "AUD",
+          "to": ["USD", "SGD"],
+          "amount": 100
+        }
+      },
+      "sampleResponse": {
+        "status": 200,
+        "body": {
+          "from": "AUD",
+          "amount": 100,
+          "date": "2026-03-19",
+          "conversions": {
+            "USD": { "rate": 0.6284, "convertedAmount": 62.84 },
+            "SGD": { "rate": 0.8482, "convertedAmount": 84.82 }
+          }
+        }
+      },
+      "errorResponses": [
+        { "status": 400, "description": "Missing required fields: from, to, amount." },
+        { "status": 400, "description": "amount must be a number." },
+        { "status": 401, "description": "Missing or invalid x-api-key or x-email header." },
+        { "status": 403, "description": "Feature not available on your current plan." },
+        { "status": 429, "description": "Monthly request limit exceeded." },
+        { "status": 500, "description": "Internal error computing conversion rate." }
+      ]
+    },
+    {
+      "id": "convert-multiple",
+      "method": "POST",
+      "path": "/api/convert/multiple",
+      "summary": "Bulk date conversion",
+      "description": "Converts date-specific amounts from one source currency to one or more target currencies. The amounts object maps each YYYY-MM-DD date to the amount to convert on that date.",
+      "requestBody": {
+        "contentType": "application/json",
+        "schema": {
+          "from": { "type": "string", "required": true, "description": "Source currency code." },
+          "to": { "type": "string[]", "required": true, "description": "Array of target currency codes." },
+          "amounts": {
+            "type": "object",
+            "required": true,
+            "description": "Map of YYYY-MM-DD date strings to the amount to convert on that date."
+          }
+        }
+      },
+      "sampleRequest": {
+        "url": "POST /api/convert/multiple",
+        "body": {
+          "from": "AUD",
+          "to": ["USD", "SGD"],
+          "amounts": {
+            "2026-03-01": 100,
+            "2026-03-02": 250,
+            "2026-03-03": 75
+          }
+        }
+      },
+      "sampleResponse": {
+        "status": 200,
+        "body": {
+          "from": "AUD",
+          "to": ["USD", "SGD"],
+          "results": {
+            "2026-03-01": {
+              "USD": { "rate": 0.6284, "convertedAmount": 62.84 },
+              "SGD": { "rate": 0.8482, "convertedAmount": 84.82 }
+            },
+            "2026-03-02": {
+              "USD": { "rate": 0.6271, "convertedAmount": 156.78 },
+              "SGD": { "rate": 0.8475, "convertedAmount": 211.88 }
+            },
+            "2026-03-03": {
+              "USD": { "rate": 0.629, "convertedAmount": 47.18 },
+              "SGD": { "rate": 0.8493, "convertedAmount": 63.7 }
+            }
+          }
+        }
+      },
+      "errorResponses": [
+        { "status": 400, "description": "Missing or invalid fields: from, to, amounts." },
+        { "status": 400, "description": "amounts must contain at least one date entry." },
+        { "status": 401, "description": "Missing or invalid x-api-key or x-email header." },
+        { "status": 403, "description": "Feature not available on your current plan." },
+        { "status": 429, "description": "Monthly request limit exceeded." },
+        { "status": 500, "description": "Internal error computing conversion rates." }
+      ]
+    },
+    {
+      "id": "metadata",
+      "method": "GET",
+      "path": "/api/metadata",
+      "summary": "Data source metadata",
+      "description": "Returns metadata about the exchange rate data sources used by FetchXRates.",
+      "parameters": [],
+      "sampleRequest": {
+        "url": "GET /api/metadata"
+      },
+      "sampleResponse": {
+        "status": 200,
+        "body": [
+          {
+            "source": "ECB",
+            "name": "European Central Bank",
+            "description": "Daily foreign exchange reference rates published by the European Central Bank.",
+            "lastUpdated": "2026-03-19T10:00:00.000Z",
+            "updateFrequency": "daily",
+            "baseCurrency": "EUR",
+            "coverage": "Global (30+ currencies)"
+          }
+        ]
+      },
+      "errorResponses": [
+        { "status": 401, "description": "Missing or invalid x-api-key or x-email header." },
+        { "status": 403, "description": "Feature not available on your current plan." },
+        { "status": 429, "description": "Monthly request limit exceeded." }
+      ]
+    },
+    {
+      "id": "docs",
+      "method": "GET",
+      "path": "/api/docs",
+      "summary": "API documentation",
+      "description": "Returns this documentation object — the full API catalogue.",
+      "parameters": [],
+      "sampleRequest": {
+        "url": "GET /api/docs"
+      },
+      "sampleResponse": {
+        "status": 200,
+        "body": "{ ... this document ... }"
+      }
+    },
+    {
+      "id": "healthcheck",
+      "method": "GET",
+      "path": "/api/healthcheck",
+      "summary": "API health check",
+      "description": "Lightweight liveness probe. Returns HTTP 200 with a status and current server timestamp.",
+      "parameters": [],
+      "sampleRequest": {
+        "url": "GET /api/healthcheck"
+      },
+      "sampleResponse": {
+        "status": 200,
+        "body": {
+          "status": "ok",
+          "timestamp": "2026-03-19T10:00:00.000Z"
+        }
+      }
+    }
+  ],
+  "rateDataNotes": {
+    "dataSources": "Rates are sourced from multiple central banks including ECB (EUR), BOE (GBP), RBA (AUD), and the US Federal Reserve (USD).",
+    "weekendsAndHolidays": "Rates are not published on weekends or public holidays. Endpoints automatically use the nearest available prior date when needed.",
+    "precision": "Rates are returned with up to 4 decimal places. Statistics use up to 6 decimal places.",
+    "crossRates": "When the requested base currency differs from the stored base, cross-rates are computed dynamically using standard FX conversion formulas.",
+    "dateFormat": "All dates in requests and responses use the YYYY-MM-DD format (ISO 8601 date)."
+  }
+}

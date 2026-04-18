@@ -21,9 +21,7 @@ export class ThemeService {
     if (savedTheme) {
       return savedTheme;
     }
-    
-    const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    return prefersDark ? 'dark' : 'light';
+    return 'dark';
   }
 
   toggleTheme(): void {

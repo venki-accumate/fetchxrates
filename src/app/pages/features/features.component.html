@@ -1,26 +1,26 @@
 <section class="features-page">
   <div class="container">
-    <!-- Header -->
-    <div class="page-header">
-      <span class="badge">Core features</span>
-      <h1>FX Data & Tools for Modern Finance Teams</h1>
-      <p class="subtitle">
-        Powerful exchange rate data with Dashboard tools for spreadsheets and developer-friendly API.
-        Trusted public sources. Historical accuracy. Built for compliance.
-      </p>
-    </div>
 
-    <!-- Dashboard Tier -->
+    <!-- Feature List -->
     <div class="feature-section">
       <div class="feature-content">
         <div class="feature-list">
           <div class="tier-label">
-            <span class="tier-badge">Dashboard Tier</span>
-            <h2>Built for Finance Teams</h2>
+            <span class="tier-badge">Feature List</span>
+            <h2>Built for Finance Teams and Developers</h2>
           </div>
           
-          @for (feature of dashboardFeatures; track feature.title) {
-            <div class="feature-item">
+          @for (feature of features; track feature.title; let i = $index) {
+            <div
+              class="feature-item"
+              [class.active]="selectedIndex() === i"
+              (click)="selectFeature(i)"
+              role="button"
+              [attr.aria-pressed]="selectedIndex() === i"
+              [attr.tabindex]="0"
+              (keydown.enter)="selectFeature(i)"
+              (keydown.space)="selectFeature(i)"
+            >
               <div class="feature-icon">
                 <span class="material-icons">{{ feature.icon }}</span>
               </div>
@@ -28,45 +28,16 @@
                 <h3>{{ feature.title }}</h3>
                 <p>{{ feature.description }}</p>
               </div>
+              <span class="selected-indicator material-icons">chevron_right</span>
             </div>
           }
         </div>
 
         <div class="feature-media">
           <div class="media-placeholder">
-            <span class="material-icons">play_circle_outline</span>
-            <p>Dashboard Demo</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-    <!-- API Tier -->
-    <div class="feature-section">
-      <div class="feature-content">
-        <div class="feature-list">
-          <div class="tier-label">
-            <span class="tier-badge accent">API Tier</span>
-            <h2>Developer-First API</h2>
-          </div>
-          
-          @for (feature of apiFeatures; track feature.title) {
-            <div class="feature-item">
-              <div class="feature-icon">
-                <span class="material-icons">{{ feature.icon }}</span>
-              </div>
-              <div class="feature-text">
-                <h3>{{ feature.title }}</h3>
-                <p>{{ feature.description }}</p>
-              </div>
-            </div>
-          }
-        </div>
-
-        <div class="feature-media">
-          <div class="media-placeholder">
-            <span class="material-icons">code</span>
-            <p>API Demo</p>
+            <span class="material-icons">{{ features[selectedIndex()].icon }}</span>
+            <p>{{ features[selectedIndex()].title }}</p>
+            <span class="media-desc">{{ features[selectedIndex()].description }}</span>
           </div>
         </div>
       </div>

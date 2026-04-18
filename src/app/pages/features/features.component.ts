@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
 
@@ -16,61 +16,43 @@ interface Feature {
   styleUrl: './features.component.scss'
 })
 export class FeaturesComponent {
-  dashboardFeatures: Feature[] = [
-    {
-      icon: 'file_download',
-      title: 'Download FX rates',
-      description: 'Browse and download latest or historical exchange rates in Excel or CSV.'
-    },
-    {
-      icon: 'table_chart',
-      title: 'Spreadsheet currency conversion',
-      description: 'Upload Excel/CSV, map date & currency columns, convert using correct historical rates.'
-    },
-    {
-      icon: 'calendar_today',
-      title: 'Historical accuracy',
-      description: 'Every conversion uses the rate for the transaction date — not today\'s rate.'
-    },
-    {
-      icon: 'settings',
-      title: 'Custom rate support',
-      description: 'Use system rates or upload your own FX rates for internal or contractual use.'
-    },
-    {
-      icon: 'person',
-      title: 'Built for non-technical users',
-      description: 'No formulas, no scripts — clean inputs, clean outputs.'
-    }
-  ];
+  selectedIndex = signal<number>(0);
 
-  apiFeatures: Feature[] = [
-    {
-      icon: 'flash_on',
-      title: 'Fast, simple FX API',
-      description: 'Clean JSON, predictable responses, easy to integrate.'
-    },
-    {
-      icon: 'trending_up',
-      title: 'Latest & historical rates',
-      description: 'Query by date, currency pair, or convert amounts directly.'
-    },
-    {
-      icon: 'account_balance',
-      title: 'Trusted public data sources',
-      description: 'Rates sourced from Reserve Bank of Australia, European Central Bank, Federal Reserve, and Bank of England (publicly available, transparently used).'
-    },
-    {
-      icon: 'rocket_launch',
-      title: 'Production-ready',
-      description: 'Cached, stable, and designed for real systems — not demos.'
-    },
-    {
-      icon: 'bar_chart',
-      title: 'Clear limits',
-      description: 'Simple request caps with no hidden throttling.'
-    }
-  ];
+  selectFeature(index: number): void {
+    this.selectedIndex.set(index);
+  }
+  features: Feature[] = [
+  {
+    icon: 'table_chart',
+    title: 'Spreadsheet FX conversion',
+    description: 'Convert Excel and CSV files using the correct rate for each row based on transaction date. Dashboard only.'
+  },
+  {
+    icon: 'schedule',
+    title: 'Latest rates (T-1)',
+    description: 'Get the latest available published rates, typically from the previous business day.'
+  },
+  {
+    icon: 'history',
+    title: 'Historical data from 2000',
+    description: 'Access long-range historical exchange rate data for analysis, reporting, and reconciliations.'
+  },
+  {
+    icon: 'account_balance',
+    title: 'Published rate access',
+    description: 'Work with published rates from trusted public and central-bank-backed sources.'
+  },
+  {
+    icon: 'bar_chart',
+    title: 'Charts and statistics',
+    description: 'View trends, compare currencies, and analyse movements with built-in visual tools. Dashboard only.'
+  },
+  {
+    icon: 'event_repeat',
+    title: 'Scheduled delivery',
+    description: 'Automate recurring delivery of exchange rate data without manual downloads. Dashboard only.'
+  }
+];
 
   useCases = [
     {

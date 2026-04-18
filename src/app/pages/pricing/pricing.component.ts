@@ -48,23 +48,23 @@ export class PricingComponent implements OnInit {
       open: false
     },
     {
-      question: 'Is there a free trial for paid plans?',
-      answer: 'Yes, all paid plans come with a 14-day free trial. No credit card required to start your trial.',
+      question: 'Is there a free trial?',
+      answer: 'We do not offer a free trial, but you can cancel within 7 days of subscribing for a full refund — no questions asked. This lets you test the service risk-free.',
       open: false
     },
     {
       question: 'What payment methods do you accept?',
-      answer: 'We accept all major credit cards (Visa, Mastercard, American Express), as well as PayPal for monthly subscriptions. Annual plans can also be paid via bank transfer.',
+      answer: 'We accept all major credit cards (Visa, Mastercard, American Express) via Stripe. All payments are processed securely.',
       open: false
     },
     {
-      question: 'Do you offer refunds?',
-      answer: 'Yes, we offer a 30-day money-back guarantee for annual plans. Monthly subscriptions can be cancelled at any time with no refunds for the current month.',
+      question: 'Can I cancel my subscription?',
+      answer: 'Yes, you can cancel your subscription at any time from the dashboard. If you cancel within 7 days of subscribing, you will receive a full refund. After 7 days, your plan remains active until the end of the current billing cycle.',
       open: false
     },
     {
       question: 'Can I get a discount for annual billing?',
-      answer: 'Yes! Save 20% by switching to annual billing. Contact our sales team for enterprise volume discounts.',
+      answer: 'Yes! Save 17% by switching to annual billing. The discount is applied automatically when you select the yearly option.',
       open: false
     }
   ];
@@ -84,7 +84,7 @@ export class PricingComponent implements OnInit {
 
   selectPlan(tier: any): void {
     if (typeof window !== 'undefined') {
-      window.location.href = `https://localhost:4200/signup/${tier.id}`;
+      window.location.href = `https://app.fetchxrates.com/signup/${tier.id}`;
     }
   }
 

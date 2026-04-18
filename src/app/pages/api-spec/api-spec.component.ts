@@ -53,55 +53,51 @@ export interface ApiEndpoint {
   errorResponses?: ErrorResponse[];
 }
 
-export interface ApiAuthentication {
-  required: boolean;
-  type: string;
-  header: string;
-  notes: string;
-}
-
-export interface RateDataNotes {
-  dataSources?: string;
-  weekendsAndHolidays?: string;
-  precision?: string;
-  crossRates?: string;
-}
-
 export interface ApiDocs {
   title: string;
   baseUrl: string;
   version: string;
   description: string;
-  authentication: ApiAuthentication;
+  authentication: {
+    required: boolean;
+    type: string;
+    headers: Record<string, string>;
+    notes: string;
+  };
+  dateFormat: string;
+  dateParameters: {
+    description: string;
+    options: { params: string; description: string }[];
+  };
   endpoints: ApiEndpoint[];
-  rateDataNotes?: RateDataNotes;
+  rateDataNotes?: {
+    dataSources?: string;
+    weekendsAndHolidays?: string;
+    precision?: string;
+    crossRates?: string;
+  };
 }
 
-/** Maps endpoint ids to groups for the sidebar navigation. */
+interface CurlCommand {
+  id: string;
+  name: string;
+  curl: string;
+}
+
+interface CurlCollection {
+  description: string;
+  baseUrl: string;
+  commands: CurlCommand[];
+}
+
 const ENDPOINT_GROUPS = [
-  {
-    label: 'Rates',
-    icon: 'trending_up',
-    ids: ['latest', 'history'],
-  },
-  {
-    label: 'Conversion',
-    icon: 'currency_exchange',
-    ids: ['convert', 'convert-multiple'],
-  },
-  {
-    label: 'Reference Data',
-    icon: 'dataset',
-    ids: ['currencies', 'supported-currencies', 'base-currencies'],
-  },
-  {
-    label: 'System',
-    icon: 'settings',
-    ids: ['metadata', 'docs', 'healthcheck'],
-  },
+  { label: 'Rates', icon: 'trending_up', ids: ['publication', 'rates', 'statistics'] },
+  { label: 'Conversion', icon: 'currency_exchange', ids: ['convert', 'convert-multiple'] },
+  { label: 'Reference Data', icon: 'dataset', ids: ['currencies', 'base-currencies'] },
+  { label: 'System', icon: 'settings', ids: ['metadata', 'docs', 'healthcheck'] },
 ];
 
-export type Section = 'introduction' | 'quickstart' | 'authentication' | 'important' | 'endpoint';
+export type Section = 'introduction' | 'quickstart' | 'authentication' | 'dates' | 'rate-limits' | 'important' | 'endpoint';
 export type CodeLang = 'curl' | 'javascript' | 'python' | 'php';
 
 @Component({
@@ -113,8 +109,9 @@ export type CodeLang = 'curl' | 'javascript' | 'python' | 'php';
 })
 export class ApiSpecComponent implements OnInit {
   docs = signal<ApiDocs | null>(null);
+  curlCommands = signal<CurlCommand[]>([]);
   activeSection = signal<Section>('introduction');
-  activeEndpointId = signal<string>('latest');
+  activeEndpointId = signal<string>('rates');
   activeCodeLang = signal<CodeLang>('curl');
   copiedId = signal<string | null>(null);
 
@@ -139,6 +136,10 @@ export class ApiSpecComponent implements OnInit {
     this.http.get<ApiDocs>('assets/rate-api-docs.json').subscribe({
       next: data => this.docs.set(data),
       error: err => console.error('[ApiSpec] Failed to load docs JSON', err),
+    });
+    this.http.get<CurlCollection>('assets/curl-commands.json').subscribe({
+      next: data => this.curlCommands.set(data.commands ?? []),
+      error: err => console.error('[ApiSpec] Failed to load curl commands', err),
     });
   }
 
@@ -188,59 +189,76 @@ export class ApiSpecComponent implements OnInit {
     return Object.entries(schema);
   }
 
-  /** Public alias for use in template (private methods aren't accessible from template). */
   resolveUrlPublic(ep: ApiEndpoint): string {
     return this.resolveUrl(ep);
   }
 
-  /** Code sample for the Authentication section showing how to set the Bearer header. */
+  downloadAsset(assetPath: string, filename: string): void {
+    this.http.get(assetPath, { responseType: 'blob' }).subscribe({
+      next: blob => {
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = filename;
+        a.click();
+        URL.revokeObjectURL(url);
+      },
+    });
+  }
+
+  getCurlForEndpoint(epId: string): string | null {
+    const cmds = this.curlCommands();
+    const match = cmds.find(c => c.id === epId || c.id.startsWith(epId));
+    return match?.curl ?? null;
+  }
+
   authCodeSample(lang: CodeLang): string {
-    const base = this.docs()?.baseUrl ?? 'https://uapi.fetchxrates.com/api';
-    const url = base.replace(/\/api.*$/, '') + '/api/latest?base=USD';
-    const token = 'YOUR_JWT_TOKEN';
+    const url = `${this.docs()?.baseUrl ?? 'https://api.fetchxrates.com/api'}/rates?from=AUD&to=USD`;
     switch (lang) {
       case 'curl':
-        return `curl -X GET \\\n  "${url}" \\\n  -H "Authorization: Bearer ${token}"`;
+        return `curl -X GET \\\n  "${url}" \\\n  -H "x-api-key: YOUR_API_KEY" \\\n  -H "x-email: you@example.com"`;
       case 'javascript':
-        return `const response = await fetch(\n  "${url}",\n  {\n    headers: {\n      "Authorization": "Bearer ${token}"\n    }\n  }\n);\nconst data = await response.json();\nconsole.log(data);`;
+        return `const response = await fetch("${url}", {\n  headers: {\n    "x-api-key": "YOUR_API_KEY",\n    "x-email": "you@example.com"\n  }\n});\nconst data = await response.json();\nconsole.log(data);`;
       case 'python':
-        return `import requests\n\nresponse = requests.get(\n    "${url}",\n    headers={"Authorization": "Bearer ${token}"}\n)\ndata = response.json()\nprint(data)`;
+        return `import requests\n\nresponse = requests.get(\n    "${url}",\n    headers={\n        "x-api-key": "YOUR_API_KEY",\n        "x-email": "you@example.com"\n    }\n)\ndata = response.json()\nprint(data)`;
       case 'php':
-        return `<?php\n$ch = curl_init();\ncurl_setopt($ch, CURLOPT_URL, "${url}");\ncurl_setopt($ch, CURLOPT_HTTPHEADER, [\n    "Authorization: Bearer ${token}"\n]);\ncurl_setopt($ch, CURLOPT_RETURNTRANSFER, true);\n$response = curl_exec($ch);\ncurl_close($ch);\n$data = json_decode($response, true);\nprint_r($data);\n?>`;
+        return `<?php\n$ch = curl_init();\ncurl_setopt($ch, CURLOPT_URL, "${url}");\ncurl_setopt($ch, CURLOPT_HTTPHEADER, [\n    "x-api-key: YOUR_API_KEY",\n    "x-email: you@example.com"\n]);\ncurl_setopt($ch, CURLOPT_RETURNTRANSFER, true);\n$response = curl_exec($ch);\ncurl_close($ch);\n$data = json_decode($response, true);\nprint_r($data);\n?>`;
     }
   }
 
-  /** Code sample for the alternate (with-date) sample request variant. */
   generateCodeSampleAlt(ep: ApiEndpoint, lang: CodeLang): string {
     if (!ep.sampleRequestWithDate) return '';
     const altEp = { ...ep, sampleRequest: ep.sampleRequestWithDate };
     return this.generateCodeSample(altEp as ApiEndpoint, lang);
   }
 
-  /** Builds the absolute URL for a given endpoint's sample request. */
   private resolveUrl(ep: ApiEndpoint): string {
     const raw = ep.sampleRequest?.url ?? ep.path;
-    // raw may be "GET /api/latest?base=AUD" — strip the method verb if present
     const pathPart = raw.includes(' ') ? raw.split(' ').slice(1).join(' ') : raw;
-    // base domain = everything up to (but not including) the first /api path segment
     const base = this.docs()?.baseUrl ?? '';
     const domain = base.replace(/\/api.*$/, '');
     return domain + pathPart;
   }
 
   generateCodeSample(ep: ApiEndpoint, lang: CodeLang): string {
+    if (lang === 'curl') {
+      const realCurl = this.getCurlForEndpoint(ep.id);
+      if (realCurl) return realCurl;
+    }
+
     const url = this.resolveUrl(ep);
     const method = ep.method;
     const body = ep.sampleRequest?.body;
-    const token = 'YOUR_JWT_TOKEN';
+    const isPublic = ep.id === 'docs' || ep.id === 'healthcheck';
 
     switch (lang) {
       case 'curl': {
-        const lines: string[] = [
-          `curl -X ${method} \\`,
-          `  "${url}" \\`,
-          `  -H "Authorization: Bearer ${token}"`,
-        ];
+        const lines: string[] = [`curl -X ${method} \\`, `  "${url}"`];
+        if (!isPublic) {
+          lines[lines.length - 1] += ' \\';
+          lines.push(`  -H "x-api-key: YOUR_API_KEY" \\`);
+          lines.push(`  -H "x-email: you@example.com"`);
+        }
         if (body) {
           lines[lines.length - 1] += ' \\';
           lines.push(`  -H "Content-Type: application/json" \\`);
@@ -250,49 +268,44 @@ export class ApiSpecComponent implements OnInit {
       }
 
       case 'javascript': {
-        const hdrs = [`    "Authorization": "Bearer ${token}"`];
+        const hdrs: string[] = [];
+        if (!isPublic) {
+          hdrs.push(`    "x-api-key": "YOUR_API_KEY"`);
+          hdrs.push(`    "x-email": "you@example.com"`);
+        }
         if (body) hdrs.push(`    "Content-Type": "application/json"`);
         const opts: string[] = [];
-        if (method !== 'GET') opts.push(`    method: "${method}"`);
-        opts.push(`    headers: {\n${hdrs.join(',\n')}\n    }`);
-        if (body) {
-          const bodyStr = JSON.stringify(body, null, 2).split('\n').join('\n    ');
-          opts.push(`    body: JSON.stringify(${bodyStr})`);
-        }
-        return [
-          `const response = await fetch(`,
-          `  "${url}",`,
-          `  {`,
-          opts.map(o => '  ' + o).join(',\n'),
-          `  }`,
-          `);`,
-          `const data = await response.json();`,
-          `console.log(data);`,
-        ].join('\n');
+        if (method !== 'GET') opts.push(`  method: "${method}",`);
+        if (hdrs.length) opts.push(`  headers: {\n${hdrs.join(',\n')}\n  }`);
+        if (body) opts.push(`  body: JSON.stringify(${JSON.stringify(body, null, 2).split('\n').join('\n  ')})`);
+        const optsStr = opts.length ? `, {\n${opts.join(',\n')}\n}` : '';
+        return `const response = await fetch("${url}"${optsStr});\nconst data = await response.json();\nconsole.log(data);`;
       }
 
       case 'python': {
         const [base, qs] = url.split('?');
         const params: Record<string, string> = {};
-        if (qs) {
-          qs.split('&').forEach(p => {
-            const [k, v] = p.split('=');
-            if (k) params[k] = decodeURIComponent(v ?? '');
-          });
-        }
+        if (qs) qs.split('&').forEach(p => { const [k, v] = p.split('='); if (k) params[k] = decodeURIComponent(v ?? ''); });
         const lines: string[] = ['import requests', ''];
-        const verb = method.toLowerCase();
-        lines.push(`response = requests.${verb}(`);
+        lines.push(`response = requests.${method.toLowerCase()}(`);
         lines.push(`    "${base}",`);
         if (body) {
-          lines.push(`    headers={`);
-          lines.push(`        "Authorization": "Bearer ${token}",`);
-          lines.push(`        "Content-Type": "application/json"`);
-          lines.push(`    },`);
+          if (!isPublic) {
+            lines.push(`    headers={`);
+            lines.push(`        "x-api-key": "YOUR_API_KEY",`);
+            lines.push(`        "x-email": "you@example.com",`);
+            lines.push(`        "Content-Type": "application/json"`);
+            lines.push(`    },`);
+          }
           lines.push(`    json=${JSON.stringify(body, null, 4).split('\n').join('\n    ')}`);
         } else {
           const hasParams = Object.keys(params).length > 0;
-          lines.push(`    headers={"Authorization": "Bearer ${token}"}${hasParams ? ',' : ''}`);
+          if (!isPublic) {
+            lines.push(`    headers={`);
+            lines.push(`        "x-api-key": "YOUR_API_KEY",`);
+            lines.push(`        "x-email": "you@example.com"`);
+            lines.push(`    }${hasParams ? ',' : ''}`);
+          }
           if (hasParams) lines.push(`    params=${JSON.stringify(params)}`);
         }
         lines.push(')');
@@ -302,28 +315,20 @@ export class ApiSpecComponent implements OnInit {
       }
 
       case 'php': {
-        const hdrs = [`    "Authorization: Bearer ${token}"`];
+        const hdrs: string[] = [];
+        if (!isPublic) {
+          hdrs.push(`    "x-api-key: YOUR_API_KEY"`);
+          hdrs.push(`    "x-email: you@example.com"`);
+        }
         if (body) hdrs.push(`    "Content-Type: application/json"`);
-        const lines: string[] = [
-          '<?php',
-          '$ch = curl_init();',
-          `curl_setopt($ch, CURLOPT_URL, "${url}");`,
-        ];
-        if (method !== 'GET') {
-          lines.push(`curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "${method}");`);
-        }
-        lines.push(`curl_setopt($ch, CURLOPT_HTTPHEADER, [\n${hdrs.join(',\n')}\n]);`);
-        if (body) {
-          lines.push(`curl_setopt($ch, CURLOPT_POSTFIELDS, '${JSON.stringify(body)}');`);
-        }
-        lines.push('curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);');
-        lines.push('$response = curl_exec($ch);');
-        lines.push('curl_close($ch);');
-        lines.push('$data = json_decode($response, true);');
-        lines.push('print_r($data);');
-        lines.push('?>');
+        const lines: string[] = ['<?php', '$ch = curl_init();', `curl_setopt($ch, CURLOPT_URL, "${url}");`];
+        if (method !== 'GET') lines.push(`curl_setopt($ch, CURLOPT_CUSTOMREQUEST, "${method}");`);
+        if (hdrs.length) lines.push(`curl_setopt($ch, CURLOPT_HTTPHEADER, [\n${hdrs.join(',\n')}\n]);`);
+        if (body) lines.push(`curl_setopt($ch, CURLOPT_POSTFIELDS, '${JSON.stringify(body)}');`);
+        lines.push('curl_setopt($ch, CURLOPT_RETURNTRANSFER, true);', '$response = curl_exec($ch);', 'curl_close($ch);', '$data = json_decode($response, true);', 'print_r($data);', '?>');
         return lines.join('\n');
       }
     }
   }
 }
+

@@ -1,0 +1,399 @@
+{
+  "info": {
+    "name": "FetchXRates Public API v1",
+    "description": "Public API for exchange rates, statistics, and currency conversion.\n\nAll dates use YYYY-MM-DD format.\n\nAuthentication: Include x-api-key and x-email headers on every request (except /healthcheck and /docs).",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "baseUrl", "value": "https://api.fetchxrates.com", "type": "string" },
+    { "key": "apiKey",  "value": "fxr_YOUR_API_KEY_HERE",        "type": "string" },
+    { "key": "email",   "value": "you@example.com",              "type": "string" }
+  ],
+  "auth": {
+    "type": "apikey",
+    "apikey": [
+      { "key": "key",   "value": "x-api-key",    "type": "string" },
+      { "key": "value", "value": "{{apiKey}}",    "type": "string" },
+      { "key": "in",    "value": "header",        "type": "string" }
+    ]
+  },
+  "event": [],
+  "item": [
+    {
+      "name": "Reference Data",
+      "item": [
+        {
+          "name": "Get All Currencies",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-api-key", "value": "{{apiKey}}" },
+              { "key": "x-email",   "value": "{{email}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/currencies",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "currencies"]
+            },
+            "description": "Returns an array of { code, name } for every supported currency."
+          }
+        },
+        {
+          "name": "Get Base Currencies",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-api-key", "value": "{{apiKey}}" },
+              { "key": "x-email",   "value": "{{email}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/base-currencies",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "base-currencies"]
+            },
+            "description": "Returns base currencies with rate data as { code, name } array."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Publication",
+      "item": [
+        {
+          "name": "Publication — default (today / latest)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-api-key", "value": "{{apiKey}}" },
+              { "key": "x-email",   "value": "{{email}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/publication?base=AUD",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "publication"],
+              "query": [
+                { "key": "base", "value": "AUD" }
+              ]
+            },
+            "description": "Published rates with no date params — returns today's (latest) rates."
+          }
+        },
+        {
+          "name": "Publication — single date",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-api-key", "value": "{{apiKey}}" },
+              { "key": "x-email",   "value": "{{email}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/publication?base=AUD&date=2026-03-19",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "publication"],
+              "query": [
+                { "key": "base", "value": "AUD" },
+                { "key": "date", "value": "2026-03-19" }
+              ]
+            },
+            "description": "Published rates for a single date."
+          }
+        },
+        {
+          "name": "Publication — date range",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-api-key", "value": "{{apiKey}}" },
+              { "key": "x-email",   "value": "{{email}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/publication?base=AUD&start=2026-03-01&end=2026-03-05&to=USD,SGD",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "publication"],
+              "query": [
+                { "key": "base",  "value": "AUD" },
+                { "key": "start", "value": "2026-03-01" },
+                { "key": "end",   "value": "2026-03-05" },
+                { "key": "to",    "value": "USD,SGD" }
+              ]
+            },
+            "description": "Published rates over a date range with target filter."
+          }
+        },
+        {
+          "name": "Publication — lookback days",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-api-key", "value": "{{apiKey}}" },
+              { "key": "x-email",   "value": "{{email}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/publication?base=AUD&lookbackDays=7&to=USD",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "publication"],
+              "query": [
+                { "key": "base",         "value": "AUD" },
+                { "key": "lookbackDays", "value": "7" },
+                { "key": "to",           "value": "USD" }
+              ]
+            },
+            "description": "Published rates for the last 7 days."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Rates",
+      "item": [
+        {
+          "name": "Rates — default (today / latest)",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-api-key", "value": "{{apiKey}}" },
+              { "key": "x-email",   "value": "{{email}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/rates?from=AUD&to=USD,SGD",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rates"],
+              "query": [
+                { "key": "from", "value": "AUD" },
+                { "key": "to",   "value": "USD,SGD" }
+              ]
+            },
+            "description": "Rates with no date params — returns today's (latest) rates only. `to` is required."
+          }
+        },
+        {
+          "name": "Rates — single date",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-api-key", "value": "{{apiKey}}" },
+              { "key": "x-email",   "value": "{{email}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/rates?from=AUD&date=2026-03-19&to=USD,SGD",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rates"],
+              "query": [
+                { "key": "from", "value": "AUD" },
+                { "key": "date", "value": "2026-03-19" },
+                { "key": "to",   "value": "USD,SGD" }
+              ]
+            },
+            "description": "Rates for a specific date."
+          }
+        },
+        {
+          "name": "Rates — date range",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-api-key", "value": "{{apiKey}}" },
+              { "key": "x-email",   "value": "{{email}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/rates?from=AUD&start=2026-01-01&end=2026-01-03&to=SGD,MYR",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rates"],
+              "query": [
+                { "key": "from",  "value": "AUD" },
+                { "key": "start", "value": "2026-01-01" },
+                { "key": "end",   "value": "2026-01-03" },
+                { "key": "to",    "value": "SGD,MYR" }
+              ]
+            },
+            "description": "Daily rates for specific targets over a date range."
+          }
+        },
+        {
+          "name": "Rates — lookback days",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-api-key", "value": "{{apiKey}}" },
+              { "key": "x-email",   "value": "{{email}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/rates?from=EUR&lookbackDays=7&to=USD,GBP",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "rates"],
+              "query": [
+                { "key": "from",         "value": "EUR" },
+                { "key": "lookbackDays", "value": "7" },
+                { "key": "to",           "value": "USD,GBP" }
+              ]
+            },
+            "description": "Rates for the last 7 days."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Statistics",
+      "item": [
+        {
+          "name": "Statistics — date range",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-api-key", "value": "{{apiKey}}" },
+              { "key": "x-email",   "value": "{{email}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/statistics?from=AUD&to=USD,SGD&start=2026-01-01&end=2026-03-01",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "statistics"],
+              "query": [
+                { "key": "from",  "value": "AUD" },
+                { "key": "to",    "value": "USD,SGD" },
+                { "key": "start", "value": "2026-01-01" },
+                { "key": "end",   "value": "2026-03-01" }
+              ]
+            },
+            "description": "Min, max, avg, median, stddev, count for USD and SGD over 2 months."
+          }
+        },
+        {
+          "name": "Statistics — lookback days",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-api-key", "value": "{{apiKey}}" },
+              { "key": "x-email",   "value": "{{email}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/statistics?from=EUR&to=USD&lookbackDays=90",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "statistics"],
+              "query": [
+                { "key": "from",         "value": "EUR" },
+                { "key": "to",           "value": "USD" },
+                { "key": "lookbackDays", "value": "90" }
+              ]
+            },
+            "description": "Statistics for the last 90 days."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Conversion",
+      "item": [
+        {
+          "name": "Convert — single date",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-api-key",    "value": "{{apiKey}}" },
+              { "key": "x-email",      "value": "{{email}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"from\": \"AUD\",\n  \"to\": [\"USD\", \"SGD\"],\n  \"amount\": 100\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/convert",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "convert"]
+            },
+            "description": "Convert 100 AUD to USD and SGD at today's rate."
+          }
+        },
+        {
+          "name": "Convert — specific date",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-api-key",    "value": "{{apiKey}}" },
+              { "key": "x-email",      "value": "{{email}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"from\": \"AUD\",\n  \"to\": [\"USD\", \"SGD\", \"MYR\"],\n  \"amount\": 500,\n  \"date\": \"2026-03-01\"\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/convert",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "convert"]
+            },
+            "description": "Convert 500 AUD on a specific date."
+          }
+        },
+        {
+          "name": "Convert Multiple — bulk dates",
+          "request": {
+            "method": "POST",
+            "header": [
+              { "key": "x-api-key",    "value": "{{apiKey}}" },
+              { "key": "x-email",      "value": "{{email}}" },
+              { "key": "Content-Type", "value": "application/json" }
+            ],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"from\": \"AUD\",\n  \"to\": [\"USD\", \"SGD\"],\n  \"amounts\": {\n    \"2026-03-01\": 100,\n    \"2026-03-02\": 250,\n    \"2026-03-03\": 75\n  }\n}"
+            },
+            "url": {
+              "raw": "{{baseUrl}}/api/convert/multiple",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "convert", "multiple"]
+            },
+            "description": "Convert different amounts on different dates in a single call."
+          }
+        }
+      ]
+    },
+    {
+      "name": "Meta",
+      "item": [
+        {
+          "name": "Metadata",
+          "request": {
+            "method": "GET",
+            "header": [
+              { "key": "x-api-key", "value": "{{apiKey}}" },
+              { "key": "x-email",   "value": "{{email}}" }
+            ],
+            "url": {
+              "raw": "{{baseUrl}}/api/metadata",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "metadata"]
+            },
+            "description": "Returns data source metadata."
+          }
+        },
+        {
+          "name": "API Docs",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/docs",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "docs"]
+            },
+            "description": "Returns the full API documentation JSON."
+          }
+        },
+        {
+          "name": "Healthcheck",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{baseUrl}}/api/healthcheck",
+              "host": ["{{baseUrl}}"],
+              "path": ["api", "healthcheck"]
+            },
+            "description": "Liveness probe — returns 200 with status and timestamp."
+          }
+        }
+      ]
+    }
+  ]
+}

@@ -51,6 +51,7 @@
 .method-icon {
   font-size: 2.5rem;
   margin-bottom: 1rem;
+  .material-icons { font-size: 2rem; color: var(--accent); }
 }
 
 .contact-method h3 {
@@ -161,9 +162,76 @@
   .contact-grid {
     grid-template-columns: 1fr;
     gap: 2rem;
+    margin: 0 1.5rem;
   }
-  
-  .hero h1 {
-    font-size: 2.5rem;
+}
+
+@media (max-width: 640px) {
+  .contact-grid {
+    margin: 0 1rem;
   }
+
+  .contact-form-wrapper {
+    padding: 1.5rem;
+  }
+
+  .company-info {
+    padding: 1rem;
+  }
+}
+
+.company-info {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  background-color: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: 0.75rem;
+
+  h3 {
+    font-size: 1.125rem;
+    margin-bottom: 0.75rem;
+    color: var(--text-primary);
+  }
+
+  .company-name {
+    font-weight: 600;
+    color: var(--text-primary);
+  }
+
+  p {
+    color: var(--text-secondary);
+    margin-bottom: 0.25rem;
+    line-height: 1.6;
+
+    a {
+      color: var(--accent);
+      text-decoration: none;
+      &:hover { text-decoration: underline; }
+    }
+  }
+}
+
+.turnstile-wrapper {
+  display: flex;
+  justify-content: flex-start;
+  margin: 0.5rem 0;
+}
+
+.error-banner {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.75rem 1rem;
+  background: rgba(239, 68, 68, 0.08);
+  border: 1px solid rgba(239, 68, 68, 0.2);
+  border-radius: 0.5rem;
+  color: #f87171;
+  font-size: 0.875rem;
+
+  .material-icons { font-size: 1.1rem; flex-shrink: 0; }
+}
+
+.success-icon .material-icons {
+  font-size: 3.5rem;
+  color: var(--accent);
 }

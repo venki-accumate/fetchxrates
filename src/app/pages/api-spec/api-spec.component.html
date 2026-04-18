@@ -10,11 +10,16 @@
           <span class="api-page-header__version">v{{ docs()!.version }}</span>
         }
       </div>
-      <button class="postman-btn" title="Download Postman Collection — coming soon" disabled>
-        <span class="material-icons">download</span>
-        Download Postman Collection
-        <span class="postman-btn__soon">Soon</span>
-      </button>
+      <div class="api-page-header__actions">
+        <button class="download-btn" (click)="downloadAsset('assets/postman-collection.json', 'FetchXRates-Postman-Collection.json')">
+          <span class="material-icons">download</span>
+          Postman Collection
+        </button>
+        <button class="download-btn" (click)="downloadAsset('assets/curl-commands.json', 'FetchXRates-cURL-Commands.json')">
+          <span class="material-icons">terminal</span>
+          cURL Commands
+        </button>
+      </div>
     </div>
   </div>
 
@@ -23,45 +28,38 @@
 
     <!-- SIDEBAR -->
     <aside class="sidebar">
-
-      <!-- Top-level nav -->
       <div class="sidebar__section">
         <button class="sidebar__nav-item" [class.active]="activeSection() === 'introduction'" (click)="selectSection('introduction')">
-          <span class="material-icons">menu_book</span>
-          Introduction
+          <span class="material-icons">menu_book</span> Introduction
         </button>
         <button class="sidebar__nav-item" [class.active]="activeSection() === 'quickstart'" (click)="selectSection('quickstart')">
-          <span class="material-icons">flash_on</span>
-          Quickstart
+          <span class="material-icons">flash_on</span> Quickstart
         </button>
         <button class="sidebar__nav-item" [class.active]="activeSection() === 'authentication'" (click)="selectSection('authentication')">
-          <span class="material-icons">lock</span>
-          Authentication
+          <span class="material-icons">lock</span> Authentication
+        </button>
+        <button class="sidebar__nav-item" [class.active]="activeSection() === 'dates'" (click)="selectSection('dates')">
+          <span class="material-icons">calendar_today</span> Date Parameters
+        </button>
+        <button class="sidebar__nav-item" [class.active]="activeSection() === 'rate-limits'" (click)="selectSection('rate-limits')">
+          <span class="material-icons">speed</span> Rate Limits
         </button>
         <button class="sidebar__nav-item" [class.active]="activeSection() === 'important'" (click)="selectSection('important')">
-          <span class="material-icons">warning_amber</span>
-          Important Information
+          <span class="material-icons">warning_amber</span> Important Information
         </button>
       </div>
 
-      <!-- API Reference endpoints -->
       <div class="sidebar__section sidebar__section--ref">
         <div class="sidebar__ref-label">
-          <span class="material-icons">api</span>
-          API Reference
+          <span class="material-icons">api</span> API Reference
         </div>
         @if (docs()) {
           @for (group of groups; track group.label) {
             <div class="sidebar__group-label">
-              <span class="material-icons">{{ group.icon }}</span>
-              {{ group.label }}
+              <span class="material-icons">{{ group.icon }}</span> {{ group.label }}
             </div>
             @for (ep of getEndpointsForGroup(group); track ep.id) {
-              <button
-                class="sidebar__ep"
-                [class.active]="activeSection() === 'endpoint' && activeEndpointId() === ep.id"
-                (click)="selectEndpoint(ep.id)"
-              >
+              <button class="sidebar__ep" [class.active]="activeSection() === 'endpoint' && activeEndpointId() === ep.id" (click)="selectEndpoint(ep.id)">
                 <span class="sidebar__ep-badge" [ngClass]="methodColor(ep.method)">{{ ep.method }}</span>
                 <span class="sidebar__ep-path">{{ ep.path }}</span>
               </button>
@@ -69,10 +67,9 @@
           }
         }
       </div>
-
     </aside>
 
-    <!-- MAIN CONTENT (no overflow — browser scroll) -->
+    <!-- MAIN CONTENT -->
     <main class="detail-panel">
 
       <!-- ====== INTRODUCTION ====== -->
@@ -80,24 +77,14 @@
         <div class="doc-section">
           @if (docs()) {
             <div class="doc-section__hero">
-              <div class="doc-hero-badge">
-                <span class="material-icons">api</span> REST API
-              </div>
+              <div class="doc-hero-badge"><span class="material-icons">api</span> REST API</div>
               <h1>{{ docs()!.title }}</h1>
               <p class="doc-hero-desc">{{ docs()!.description }}</p>
               <div class="doc-hero-chips">
-                <span class="meta-chip">
-                  <span class="material-icons">tag</span> v{{ docs()!.version }}
-                </span>
-                <span class="meta-chip">
-                  <span class="material-icons">link</span> {{ docs()!.baseUrl }}
-                </span>
-                <span class="meta-chip meta-chip--auth">
-                  <span class="material-icons">lock</span> Bearer Token Auth
-                </span>
-                <span class="meta-chip">
-                  <span class="material-icons">code</span> JSON
-                </span>
+                <span class="meta-chip"><span class="material-icons">tag</span> v{{ docs()!.version }}</span>
+                <span class="meta-chip"><span class="material-icons">link</span> {{ docs()!.baseUrl }}</span>
+                <span class="meta-chip meta-chip--auth"><span class="material-icons">vpn_key</span> API Key Auth</span>
+                <span class="meta-chip"><span class="material-icons">code</span> JSON</span>
               </div>
             </div>
           }
@@ -106,7 +93,7 @@
             <div class="intro-feature-card">
               <span class="material-icons intro-feature-card__icon">trending_up</span>
               <strong>Live Exchange Rates</strong>
-              <p>Real-time rates sourced from ECB, BOE, RBA, and the US Federal Reserve with up to 14-day fallback for weekends and holidays.</p>
+              <p>Real-time rates sourced from ECB, BOE, RBA, and the US Federal Reserve with automatic fallback for weekends and holidays.</p>
             </div>
             <div class="intro-feature-card">
               <span class="material-icons intro-feature-card__icon">currency_exchange</span>
@@ -144,18 +131,23 @@
             </div>
             <div class="intro-info-row">
               <span class="intro-info-key">Authentication</span>
-              <code class="intro-info-val">Bearer Token (AWS Cognito JWT)</code>
+              <code class="intro-info-val">API Key (x-api-key header)</code>
+            </div>
+            <div class="intro-info-row">
+              <span class="intro-info-key">Date Format</span>
+              <code class="intro-info-val">{{ docs()?.dateFormat || 'YYYY-MM-DD' }}</code>
             </div>
           </div>
 
           <div class="intro-cta-row">
             <button class="btn-primary" (click)="selectSection('quickstart')">
-              <span class="material-icons">flash_on</span>
-              Get Started
+              <span class="material-icons">flash_on</span> Get Started
             </button>
-            <button class="btn-outline" (click)="selectEndpoint('latest')">
-              <span class="material-icons">api</span>
-              Browse API Reference
+            <button class="btn-outline" (click)="selectEndpoint('rates')">
+              <span class="material-icons">api</span> Browse API Reference
+            </button>
+            <button class="btn-outline" (click)="downloadAsset('assets/postman-collection.json', 'FetchXRates-Postman-Collection.json')">
+              <span class="material-icons">download</span> Download Postman Collection
             </button>
           </div>
         </div>
@@ -173,7 +165,7 @@
             <div class="qs-step__num">1</div>
             <div class="qs-step__body">
               <h3>Sign up and get your API key</h3>
-              <p>Create an account at <strong>fetchxrates.com</strong> and subscribe to a plan. Your JWT token is available in the dashboard under <em>API Settings</em>. Tokens are issued via AWS Cognito after sign-in.</p>
+              <p>Create an account at <a href="https://app.fetchxrates.com/signup" target="_blank" rel="noopener"><strong>app.fetchxrates.com</strong></a> and choose a plan. Once subscribed, go to <strong>API Keys</strong> in the dashboard to generate your API key. It starts with <code class="inline-code">fxr_</code> prefix.</p>
               <a class="qs-link" href="https://fetchxrates.com/pricing" target="_blank" rel="noopener">
                 <span class="material-icons">open_in_new</span> View pricing plans
               </a>
@@ -184,15 +176,15 @@
             <div class="qs-step__num">2</div>
             <div class="qs-step__body">
               <h3>Make your first request</h3>
-              <p>Call the <code class="inline-code">/api/latest</code> endpoint to retrieve the latest exchange rates for a base currency.</p>
+              <p>Call the <code class="inline-code">/api/rates</code> endpoint with your API key and email to retrieve the latest exchange rates. The <code class="inline-code">x-api-key</code> and <code class="inline-code">x-email</code> headers are required on every request (except <code class="inline-code">/docs</code> and <code class="inline-code">/healthcheck</code>).</p>
               <div class="code-col">
                 <div class="code-block-header">
-                  <span class="material-icons">terminal</span>
-                  cURL
+                  <span class="material-icons">terminal</span> cURL
                 </div>
                 <pre class="code-block"><code><span class="token-method">curl</span> -X <span class="token-method">GET</span> \
-  <span class="token-url">"https://uapi.fetchxrates.com/api/latest?base=USD"</span> \
-  -H <span class="token-header">"Authorization: Bearer YOUR_JWT_TOKEN"</span></code></pre>
+  <span class="token-url">"https://api.fetchxrates.com/api/rates?from=AUD&to=USD"</span> \
+  -H <span class="token-header">"x-api-key: YOUR_API_KEY"</span> \
+  -H <span class="token-header">"x-email: you&#64;example.com"</span></code></pre>
               </div>
             </div>
           </div>
@@ -201,23 +193,17 @@
             <div class="qs-step__num">3</div>
             <div class="qs-step__body">
               <h3>Handle the response</h3>
-              <p>A successful response returns <code class="inline-code">200 OK</code> with a JSON body containing the base currency, date, and rates object.</p>
+              <p>A successful response returns <code class="inline-code">200 OK</code> with a JSON body containing the base currency, dates, and rates.</p>
               <div class="code-col">
                 <div class="code-block-header">
-                  <span class="material-icons">output</span>
-                  Response
+                  <span class="material-icons">output</span> Response
                   <span class="status-pill status-2xx">200 OK</span>
                 </div>
                 <pre class="code-block"><code><span class="token-json">&#123;
-  "base": "USD",
-  "date": "2026-03-19",
+  "base": "AUD",
+  "date": "2026-04-18",
   "rates": &#123;
-    "EUR": 0.9261,
-    "GBP": 0.7916,
-    "JPY": 149.82,
-    "AUD": 1.5912,
-    "CAD": 1.3571,
-    "CHF": 0.8974
+    "USD": 0.6432
   &#125;
 &#125;</span></code></pre>
               </div>
@@ -228,24 +214,23 @@
             <div class="qs-step__num">4</div>
             <div class="qs-step__body">
               <h3>Explore more endpoints</h3>
-              <p>Now that you're up and running, explore historical rates, bulk conversion, and reference data endpoints.</p>
+              <p>Now that you're up and running, explore historical rates, bulk conversion, published central bank data, and reference data endpoints.</p>
               <div class="qs-next-links">
                 <button class="qs-next-btn" (click)="selectSection('authentication')">
-                  <span class="material-icons">lock</span>
-                  Authentication Guide
+                  <span class="material-icons">lock</span> Authentication Guide
+                </button>
+                <button class="qs-next-btn" (click)="selectSection('dates')">
+                  <span class="material-icons">calendar_today</span> Date Parameters
                 </button>
                 <button class="qs-next-btn" (click)="selectEndpoint('convert')">
-                  <span class="material-icons">currency_exchange</span>
-                  Convert Currencies
+                  <span class="material-icons">currency_exchange</span> Convert Currencies
                 </button>
-                <button class="qs-next-btn" (click)="selectEndpoint('history')">
-                  <span class="material-icons">history</span>
-                  Historical Rates
+                <button class="qs-next-btn" (click)="selectEndpoint('publication')">
+                  <span class="material-icons">account_balance</span> Published Rates
                 </button>
               </div>
             </div>
           </div>
-
         </div>
       }
 
@@ -254,33 +239,38 @@
         <div class="doc-section">
           <div class="doc-section__header">
             <h1>Authentication</h1>
-            <p>All FetchXRates API requests require a valid Bearer token issued via AWS Cognito.</p>
+            <p>All FetchXRates API requests require an API key and your registered email address.</p>
           </div>
 
-          @if (docs()) {
-            <div class="auth-info-table">
-              <div class="auth-info-row">
-                <span class="auth-info-key">Type</span>
-                <span class="auth-info-val">{{ docs()!.authentication.type }}</span>
-              </div>
-              <div class="auth-info-row">
-                <span class="auth-info-key">Header</span>
-                <code class="auth-info-code">{{ docs()!.authentication.header }}</code>
-              </div>
-              <div class="auth-info-row">
-                <span class="auth-info-key">Required</span>
-                <span class="badge-required" style="width:fit-content">Yes — all endpoints</span>
-              </div>
+          <div class="auth-info-table">
+            <div class="auth-info-row">
+              <span class="auth-info-key">Type</span>
+              <span class="auth-info-val">API Key</span>
             </div>
+            <div class="auth-info-row">
+              <span class="auth-info-key">Header 1</span>
+              <code class="auth-info-code">x-api-key: YOUR_API_KEY</code>
+            </div>
+            <div class="auth-info-row">
+              <span class="auth-info-key">Header 2</span>
+              <code class="auth-info-code">x-email: you&#64;example.com</code>
+            </div>
+            <div class="auth-info-row">
+              <span class="auth-info-key">Required</span>
+              <span class="badge-required" style="width:fit-content">Yes — all endpoints except /docs and /healthcheck</span>
+            </div>
+          </div>
 
-            <div class="auth-note-block">
-              <span class="material-icons">info</span>
-              <p>{{ docs()!.authentication.notes }}</p>
+          <div class="auth-note-block">
+            <span class="material-icons">info</span>
+            <div>
+              <p>Both <code class="inline-code">x-api-key</code> and <code class="inline-code">x-email</code> headers must be sent with every authenticated request. The email must match the account that generated the API key.</p>
+              <p style="margin-top: 0.5rem;">API keys start with <code class="inline-code">fxr_</code> and can be generated from the <strong>API Keys</strong> section of your FetchXRates dashboard.</p>
             </div>
-          }
+          </div>
 
           <h3 class="auth-sub-heading">How to authenticate</h3>
-          <p class="auth-sub-desc">Include your JWT token in the <code class="inline-code">Authorization</code> header of every request:</p>
+          <p class="auth-sub-desc">Include both headers in every request:</p>
 
           <div class="lang-tabs">
             @for (lang of codeLangs; track lang) {
@@ -292,8 +282,7 @@
 
           <div class="code-col">
             <div class="code-block-header">
-              <span class="material-icons">terminal</span>
-              {{ codeLangLabels[activeCodeLang()] }}
+              <span class="material-icons">terminal</span> {{ codeLangLabels[activeCodeLang()] }}
               <button class="copy-btn copy-btn--sm" (click)="copyToClipboard(authCodeSample(activeCodeLang()), 'auth-' + activeCodeLang())">
                 <span class="material-icons">{{ copiedId() === 'auth-' + activeCodeLang() ? 'check' : 'content_copy' }}</span>
                 {{ copiedId() === 'auth-' + activeCodeLang() ? 'Copied!' : 'Copy' }}
@@ -303,15 +292,140 @@
           </div>
 
           <div class="auth-tips">
-            <h3>Token tips</h3>
+            <h3>Key tips</h3>
             <ul>
-              <li>Tokens are time-limited — refresh them via your Cognito session before expiry.</li>
-              <li>Never expose your token in client-side code or public repositories.</li>
-              <li>Each subscription plan has a rate limit — see your dashboard for current usage.</li>
-              <li>A <code class="inline-code">401 Unauthorized</code> response usually means your token has expired.</li>
+              <li>API keys are permanent and do not expire — but you can regenerate them from the dashboard at any time.</li>
+              <li>Never expose your API key in client-side code or public repositories.</li>
+              <li>A <code class="inline-code">401 Unauthorized</code> response means the API key is invalid or missing.</li>
+              <li>A <code class="inline-code">403 Forbidden</code> response means your plan does not include access to the requested feature.</li>
+              <li>A <code class="inline-code">429 Too Many Requests</code> response means you've exceeded your monthly request limit.</li>
+              <li>Each subscription plan has a request limit — check your dashboard for current usage.</li>
             </ul>
           </div>
 
+          <div class="auth-tips" style="margin-top: 1.25rem;">
+            <h3>Error responses</h3>
+            <div class="error-table">
+              <div class="error-row">
+                <span class="error-status status-4xx">401</span>
+                <span class="error-desc">Missing or invalid <code class="inline-code">x-api-key</code> or <code class="inline-code">x-email</code> header</span>
+              </div>
+              <div class="error-row">
+                <span class="error-status status-4xx">403</span>
+                <span class="error-desc">Feature not available on your plan (e.g. publication access, currency limit exceeded)</span>
+              </div>
+              <div class="error-row">
+                <span class="error-status status-4xx">429</span>
+                <span class="error-desc">Monthly request limit reached — upgrade plan or wait for next billing cycle</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      }
+
+      <!-- ====== DATE PARAMETERS ====== -->
+      @if (activeSection() === 'dates') {
+        <div class="doc-section">
+          <div class="doc-section__header">
+            <h1>Date Parameters</h1>
+            <p>Most endpoints support flexible date input. All dates use <code class="inline-code">YYYY-MM-DD</code> format.</p>
+          </div>
+
+          @if (docs()?.dateParameters) {
+            <div class="auth-note-block">
+              <span class="material-icons">info</span>
+              <p>{{ docs()!.dateParameters.description }}</p>
+            </div>
+
+            <div class="params-table" style="margin-top: 1.25rem;">
+              <div class="params-table__header params-table__header--4col">
+                <span>Parameter(s)</span><span>Priority</span><span>Format</span><span>Description</span>
+              </div>
+              @for (opt of docs()!.dateParameters.options; track opt.params; let i = $index) {
+                <div class="params-table__row params-table__row--4col">
+                  <span class="param-name">{{ opt.params === '(none)' ? '(default)' : opt.params }}</span>
+                  <span class="param-type">{{ i + 1 }}</span>
+                  <span class="param-type">{{ opt.params === '(none)' ? '—' : 'YYYY-MM-DD' }}</span>
+                  <span class="param-desc">{{ opt.description }}</span>
+                </div>
+              }
+            </div>
+          }
+
+          <h3 class="auth-sub-heading" style="margin-top: 2rem;">Examples</h3>
+
+          <div class="code-col" style="margin-bottom: 1rem;">
+            <div class="code-block-header">
+              <span class="material-icons">calendar_today</span> Date range
+            </div>
+            <pre class="code-block"><code>/api/rates?from=AUD&to=USD&<span class="token-header">start=2026-01-01</span>&<span class="token-header">end=2026-03-01</span></code></pre>
+          </div>
+          <div class="code-col" style="margin-bottom: 1rem;">
+            <div class="code-block-header">
+              <span class="material-icons">event</span> Single date
+            </div>
+            <pre class="code-block"><code>/api/rates?from=AUD&to=USD&<span class="token-header">date=2026-03-19</span></code></pre>
+          </div>
+          <div class="code-col" style="margin-bottom: 1rem;">
+            <div class="code-block-header">
+              <span class="material-icons">history</span> Lookback days
+            </div>
+            <pre class="code-block"><code>/api/rates?from=AUD&to=USD&<span class="token-header">lookbackDays=30</span></code></pre>
+          </div>
+          <div class="code-col">
+            <div class="code-block-header">
+              <span class="material-icons">today</span> Default (today only)
+            </div>
+            <pre class="code-block"><code>/api/rates?from=AUD&to=USD</code></pre>
+          </div>
+        </div>
+      }
+
+      <!-- ====== RATE LIMITS ====== -->
+      @if (activeSection() === 'rate-limits') {
+        <div class="doc-section">
+          <div class="doc-section__header">
+            <h1>Rate Limits</h1>
+            <p>API usage is governed by your subscription plan. Limits are enforced per billing cycle.</p>
+          </div>
+
+          <div class="intro-info-table">
+            <div class="intro-info-row">
+              <span class="intro-info-key">Requests</span>
+              <span class="param-desc">Monthly request cap (e.g. 2,000 / 10,000 / 20,000). Returns <code class="inline-code">429</code> when exceeded.</span>
+            </div>
+            <div class="intro-info-row">
+              <span class="intro-info-key">Currencies</span>
+              <span class="param-desc">Max target currencies per request (e.g. <code class="inline-code">?to=USD,SGD,EUR</code>). Returns <code class="inline-code">403</code> when exceeded.</span>
+            </div>
+            <div class="intro-info-row">
+              <span class="intro-info-key">Date Range</span>
+              <span class="param-desc">Max date span per request (e.g. 1–5 years depending on plan). Returns <code class="inline-code">403</code> when exceeded.</span>
+            </div>
+            <div class="intro-info-row">
+              <span class="intro-info-key">Excel Rows</span>
+              <span class="param-desc">Max rows per Excel conversion request (e.g. 500–20,000). Returns <code class="inline-code">403</code> when exceeded.</span>
+            </div>
+            <div class="intro-info-row">
+              <span class="intro-info-key">Schedules</span>
+              <span class="param-desc">Max active automated delivery schedules (e.g. 2–10). Returns <code class="inline-code">403</code> when exceeded.</span>
+            </div>
+            <div class="intro-info-row">
+              <span class="intro-info-key">Publication</span>
+              <span class="param-desc">Access to published central bank rate data. Available on Growth and Professional plans only.</span>
+            </div>
+          </div>
+
+          <div class="auth-note-block" style="margin-top: 1.25rem;">
+            <span class="material-icons">info</span>
+            <p>View your current usage and limits in the FetchXRates dashboard. Limits reset at the start of each billing cycle based on your subscription start date.</p>
+          </div>
+
+          <div class="intro-cta-row" style="margin-top: 1.5rem;">
+            <a class="btn-primary" href="https://fetchxrates.com/pricing" target="_blank" rel="noopener">
+              <span class="material-icons">open_in_new</span> View Plans & Limits
+            </a>
+          </div>
         </div>
       }
 
@@ -372,7 +486,6 @@
       <!-- ====== ENDPOINT DETAIL ====== -->
       @if (activeSection() === 'endpoint') {
         @if (activeEndpoint(); as ep) {
-
           <div class="ep-header">
             <div class="ep-header__top">
               <span class="method-badge" [ngClass]="methodColor(ep.method)">{{ ep.method }}</span>
@@ -387,12 +500,9 @@
 
           <div class="ep-body">
 
-            <!-- Parameters -->
             @if (ep.parameters && ep.parameters.length > 0) {
               <section class="ep-section">
-                <h3 class="ep-section__title">
-                  <span class="material-icons">tune</span> Query Parameters
-                </h3>
+                <h3 class="ep-section__title"><span class="material-icons">tune</span> Query Parameters</h3>
                 <div class="params-table">
                   <div class="params-table__header">
                     <span>Name</span><span>Type</span><span>Required</span><span>Default</span><span>Description</span>
@@ -410,7 +520,6 @@
               </section>
             }
 
-            <!-- Request Body -->
             @if (ep.requestBody) {
               <section class="ep-section">
                 <h3 class="ep-section__title">
@@ -433,12 +542,8 @@
               </section>
             }
 
-            <!-- Code Samples + Response -->
             <section class="ep-section">
-              <h3 class="ep-section__title">
-                <span class="material-icons">code</span> Code Samples
-              </h3>
-
+              <h3 class="ep-section__title"><span class="material-icons">code</span> Code Samples</h3>
               <div class="lang-tabs">
                 @for (lang of codeLangs; track lang) {
                   <button class="lang-tab" [class.active]="activeCodeLang() === lang" (click)="setCodeLang(lang)">
@@ -446,13 +551,10 @@
                   </button>
                 }
               </div>
-
               <div class="code-cols">
-
                 <div class="code-col">
                   <div class="code-block-header">
-                    <span class="material-icons">terminal</span>
-                    {{ codeLangLabels[activeCodeLang()] }}
+                    <span class="material-icons">terminal</span> {{ codeLangLabels[activeCodeLang()] }}
                     <button class="copy-btn copy-btn--sm" (click)="copyToClipboard(generateCodeSample(ep, activeCodeLang()), 'code-' + ep.id)">
                       <span class="material-icons">{{ copiedId() === 'code-' + ep.id ? 'check' : 'content_copy' }}</span>
                       {{ copiedId() === 'code-' + ep.id ? 'Copied!' : 'Copy' }}
@@ -462,8 +564,7 @@
 
                   @if (ep.sampleRequestWithDate) {
                     <div class="code-block-header code-block-header--secondary">
-                      <span class="material-icons">calendar_today</span>
-                      With optional date parameter
+                      <span class="material-icons">calendar_today</span> With optional date parameter
                     </div>
                     <pre class="code-block code-block--secondary"><code>{{ generateCodeSampleAlt(ep, activeCodeLang()) }}</code></pre>
                   }
@@ -472,11 +573,8 @@
                 @if (ep.sampleResponse) {
                   <div class="code-col">
                     <div class="code-block-header">
-                      <span class="material-icons">output</span>
-                      Response
-                      <span class="status-pill" [ngClass]="statusColor(ep.sampleResponse.status)">
-                        {{ ep.sampleResponse.status }} OK
-                      </span>
+                      <span class="material-icons">output</span> Response
+                      <span class="status-pill" [ngClass]="statusColor(ep.sampleResponse.status)">{{ ep.sampleResponse.status }} OK</span>
                       <button class="copy-btn copy-btn--sm" (click)="copyToClipboard(formatJson(ep.sampleResponse.body), 'res-' + ep.id)">
                         <span class="material-icons">{{ copiedId() === 'res-' + ep.id ? 'check' : 'content_copy' }}</span>
                         {{ copiedId() === 'res-' + ep.id ? 'Copied!' : 'Copy' }}
@@ -485,16 +583,12 @@
                     <pre class="code-block"><code><span class="token-json">{{ formatJson(ep.sampleResponse.body) }}</span></code></pre>
                   </div>
                 }
-
               </div>
             </section>
 
-            <!-- Error Responses -->
             @if (ep.errorResponses && ep.errorResponses.length > 0) {
               <section class="ep-section">
-                <h3 class="ep-section__title">
-                  <span class="material-icons">error_outline</span> Error Responses
-                </h3>
+                <h3 class="ep-section__title"><span class="material-icons">error_outline</span> Error Responses</h3>
                 <div class="error-table">
                   @for (err of ep.errorResponses; track err.status + err.description) {
                     <div class="error-row">
@@ -505,13 +599,10 @@
                 </div>
               </section>
             }
-
           </div>
-
         }
       }
 
     </main>
   </div>
-
 </div>

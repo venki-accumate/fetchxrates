@@ -1,7 +1,7 @@
 {
   "pricing": {
-    "monthly": [6, 12, 21],
-    "yearly": [60, 120, 210]
+    "monthly": [4, 8, 14],
+    "yearly": [40, 80, 140]
   },
   "tiers": [
     {
@@ -9,12 +9,11 @@
       "description": "For individuals and light finance workflows",
       "popular": false,
       "features": [
-        "2,000 requests per month",
-        "15,000 data points per month",
+        "5,000 requests per month",
         "Excel Conversion: up to 500 rows per request",
-        "Time Series: up to 1 year range, up to 3 currencies per request",
+        "Time Series: up to 1 year range, up to 5 currencies per request",
         "Statistics: same limits as time series",
-        "Scheduler: up to 2 active schedules, up to 3 currencies per schedule",
+        "Scheduler: up to 3 active schedules, up to 5 currencies per schedule",
         "Full API access included",
         "Secure HTTPS access",
         "Privacy-focused data handling",
@@ -29,12 +28,11 @@
       "popular": true,
       "badgeText": "MOST POPULAR",
       "features": [
-        "10,000 requests per month",
-        "200,000 data points per month",
-        "Excel Conversion: up to 2,000 rows per request",
-        "Time Series: up to 3 year range, up to 10 currencies per request",
+        "20,000 requests per month",
+        "Excel Conversion: up to 4,000 rows per request",
+        "Time Series: up to 3 year range, up to 12 currencies per request",
         "Statistics: same limits as time series",
-        "Scheduler: up to 5 active schedules, up to 10 currencies per schedule",
+        "Scheduler: up to 6 active schedules, up to 12 currencies per schedule",
         "Early access to latest published rates",
         "Full API access included",
         "Secure HTTPS access",
@@ -49,12 +47,11 @@
       "description": "For high-volume workloads and advanced automation",
       "popular": false,
       "features": [
-        "20,000 requests per month",
-        "1,000,000 data points per month",
-        "Excel Conversion: up to 20,000 rows per request",
-        "Time Series: up to 5 year range, up to 20 currencies per request",
+        "60,000 requests per month",
+        "Excel Conversion: up to 40,000 rows per request",
+        "Time Series: up to 10 year range, up to 25 currencies per request",
         "Statistics: same limits as time series",
-        "Scheduler: up to 10 active schedules, up to 20 currencies per schedule",
+        "Scheduler: up to 15 active schedules, up to 25 currencies per schedule",
         "Early access to latest published rates",
         "Full API access included",
         "Secure HTTPS access",
@@ -64,9 +61,6 @@
       "cta": "Get started",
       "id": "professional"
     }
-  ],
-  "notes": [
-    "1 data point = 1 currency × 1 date"
   ],
   "comparison": [
     { 
@@ -83,32 +77,27 @@
     { 
       "label": "Requests / month", 
       "description": "Total number of API requests allowed per month across all endpoints.", 
-      "values": ["2,000", "10,000", "20,000"] 
-    },
-    { 
-      "label": "Data points / month", 
-      "description": "Total number of currency data points processed. 1 data point = 1 currency per trading day", 
-      "values": ["15,000", "200,000", "1,000,000"] 
+      "values": ["5,000", "20,000", "60,000"] 
     },
     { 
       "label": "Currencies per request", 
       "description": "Number of target currencies you can convert to in a single request.", 
-      "values": ["3", "10", "20"] 
+      "values": ["5", "12", "25"] 
     },
     { 
       "label": "Excel Conversion", 
       "description": "Maximum number of rows supported per file upload for currency conversion.", 
-      "values": ["500 rows per request", "2,000 rows per request", "20,000 rows per request"] 
+      "values": ["500 rows per request", "4,000 rows per request", "40,000 rows per request"] 
     },
     { 
       "label": "Time Series Range", 
       "description": "Maximum historical date range allowed per request.", 
-      "values": ["1 year interval", "3 year interval", "5 year interval"] 
+      "values": ["1 year interval", "3 year interval", "10 year interval"] 
     },
     { 
       "label": "Active Schedules", 
       "description": "Number of automated scheduled jobs you can run (daily, weekly, monthly exports).", 
-      "values": ["2", "5", "10"] 
+      "values": ["3", "6", "15"] 
     },
     { 
       "label": "Central bank(s) rate delivery", 

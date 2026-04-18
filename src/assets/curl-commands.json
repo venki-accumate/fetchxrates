@@ -1,0 +1,96 @@
+{
+  "description": "cURL commands for FetchXRates Public API v1. Replace YOUR_API_KEY and you@example.com with real values. All dates use YYYY-MM-DD format.",
+  "baseUrl": "https://api.fetchxrates.com",
+  "commands": [
+    {
+      "id": "currencies",
+      "name": "Get All Currencies",
+      "curl": "curl -s \\\n  -H 'x-api-key: YOUR_API_KEY' \\\n  -H 'x-email: you@example.com' \\\n  \"https://api.fetchxrates.com/api/currencies'\""
+    },
+    {
+      "id": "base-currencies",
+      "name": "Get Base Currencies",
+      "curl": "curl -s \\\n  -H 'x-api-key: YOUR_API_KEY' \\\n  -H 'x-email: you@example.com' \\\n  \"https://api.fetchxrates.com/api/base-currencies'\""
+    },
+    {
+      "id": "publication-single-date",
+      "name": "Publication \u2014 single date",
+      "curl": "curl -s \\\n  -H 'x-api-key: YOUR_API_KEY' \\\n  -H 'x-email: you@example.com' \\\n  \"https://api.fetchxrates.com/api/publication?base=AUD&date=2026-03-19'\""
+    },
+    {
+      "id": "publication-date-range",
+      "name": "Publication \u2014 date range with target filter",
+      "curl": "curl -s \\\n  -H 'x-api-key: YOUR_API_KEY' \\\n  -H 'x-email: you@example.com' \\\n  \"https://api.fetchxrates.com/api/publication?base=AUD&start=2026-03-01&end=2026-03-05&to=USD,SGD'\""
+    },
+    {
+      "id": "publication-lookback",
+      "name": "Publication \u2014 lookback days",
+      "curl": "curl -s \\\n  -H 'x-api-key: YOUR_API_KEY' \\\n  -H 'x-email: you@example.com' \\\n  \"https://api.fetchxrates.com/api/publication?base=AUD&lookbackDays=7&to=USD'\""
+    },
+    {
+      "id": "publication-default",
+      "name": "Publication \u2014 default (today / latest)",
+      "curl": "curl -s \\\n  -H 'x-api-key: YOUR_API_KEY' \\\n  -H 'x-email: you@example.com' \\\n  \"https://api.fetchxrates.com/api/publication?base=AUD'\""
+    },
+    {
+      "id": "rates-date-range",
+      "name": "Rates \u2014 date range",
+      "curl": "curl -s \\\n  -H 'x-api-key: YOUR_API_KEY' \\\n  -H 'x-email: you@example.com' \\\n  \"https://api.fetchxrates.com/api/rates?from=AUD&start=2026-01-01&end=2026-01-03&to=SGD,MYR'\""
+    },
+    {
+      "id": "rates-single-date",
+      "name": "Rates \u2014 single date",
+      "curl": "curl -s \\\n  -H 'x-api-key: YOUR_API_KEY' \\\n  -H 'x-email: you@example.com' \\\n  \"https://api.fetchxrates.com/api/rates?from=AUD&date=2026-03-19&to=USD,SGD'\""
+    },
+    {
+      "id": "rates-lookback",
+      "name": "Rates \u2014 lookback days",
+      "curl": "curl -s \\\n  -H 'x-api-key: YOUR_API_KEY' \\\n  -H 'x-email: you@example.com' \\\n  \"https://api.fetchxrates.com/api/rates?from=EUR&lookbackDays=7&to=USD,GBP'\""
+    },
+    {
+      "id": "rates-default",
+      "name": "Rates \u2014 default (today / latest)",
+      "curl": "curl -s \\\n  -H 'x-api-key: YOUR_API_KEY' \\\n  -H 'x-email: you@example.com' \\\n  \"https://api.fetchxrates.com/api/rates?from=AUD&to=USD,SGD'\""
+    },
+    {
+      "id": "statistics-date-range",
+      "name": "Statistics \u2014 date range",
+      "curl": "curl -s \\\n  -H 'x-api-key: YOUR_API_KEY' \\\n  -H 'x-email: you@example.com' \\\n  \"https://api.fetchxrates.com/api/statistics?from=AUD&to=USD,SGD&start=2026-01-01&end=2026-03-01'\""
+    },
+    {
+      "id": "statistics-lookback",
+      "name": "Statistics \u2014 lookback 90 days",
+      "curl": "curl -s \\\n  -H 'x-api-key: YOUR_API_KEY' \\\n  -H 'x-email: you@example.com' \\\n  \"https://api.fetchxrates.com/api/statistics?from=EUR&to=USD&lookbackDays=90'\""
+    },
+    {
+      "id": "convert",
+      "name": "Convert \u2014 today's rate",
+      "curl": "curl -s -X POST \\\n  -H 'Content-Type: application/json' \\\n  -H 'x-api-key: YOUR_API_KEY' \\\n  -H 'x-email: you@example.com' \\\n  -d '{\n  \"from\": \"AUD\",\n  \"to\": [\n    \"USD\",\n    \"SGD\"\n  ],\n  \"amount\": 100\n}' \\\n  \"https://api.fetchxrates.com/api/convert'\""
+    },
+    {
+      "id": "convert-with-date",
+      "name": "Convert \u2014 specific date",
+      "curl": "curl -s -X POST \\\n  -H 'Content-Type: application/json' \\\n  -H 'x-api-key: YOUR_API_KEY' \\\n  -H 'x-email: you@example.com' \\\n  -d '{\n  \"from\": \"AUD\",\n  \"to\": [\n    \"USD\",\n    \"SGD\",\n    \"MYR\"\n  ],\n  \"amount\": 500,\n  \"date\": \"2026-03-01\"\n}' \\\n  \"https://api.fetchxrates.com/api/convert'\""
+    },
+    {
+      "id": "convert-multiple",
+      "name": "Convert Multiple \u2014 bulk dates",
+      "curl": "curl -s -X POST \\\n  -H 'Content-Type: application/json' \\\n  -H 'x-api-key: YOUR_API_KEY' \\\n  -H 'x-email: you@example.com' \\\n  -d '{\n  \"from\": \"AUD\",\n  \"to\": [\n    \"USD\",\n    \"SGD\"\n  ],\n  \"amounts\": {\n    \"2026-03-01\": 100,\n    \"2026-03-02\": 250,\n    \"2026-03-03\": 75\n  }\n}' \\\n  \"https://api.fetchxrates.com/api/convert/multiple'\""
+    },
+    {
+      "id": "metadata",
+      "name": "Metadata",
+      "curl": "curl -s \\\n  -H 'x-api-key: YOUR_API_KEY' \\\n  -H 'x-email: you@example.com' \\\n  \"https://api.fetchxrates.com/api/metadata'\""
+    },
+    {
+      "id": "docs",
+      "name": "API Docs",
+      "curl": "curl -s \\\n  \"https://api.fetchxrates.com/api/docs'\""
+    },
+    {
+      "id": "healthcheck",
+      "name": "Healthcheck",
+      "curl": "curl -s \\\n  \"https://api.fetchxrates.com/api/healthcheck'\""
+    }
+  ]
+}
