@@ -1,6 +1,7 @@
 import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { environment } from '../../../../environments/environment';
 import { ButtonComponent } from '../../shared/button/button.component';
 
 @Component({
@@ -14,7 +15,7 @@ export class HeroComponent {
   constructor(private router: Router) {}
 
   navigateToSignup(): void {
-    window.location.href = 'https://app.fetchxrates.com/signup';
+    window.location.href = `${environment.appUrl}/signup`;
   }
 
   navigateToFeatures(): void {

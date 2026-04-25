@@ -1,6 +1,7 @@
 import { Component, OnInit, Input } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterLink } from '@angular/router';
+import { environment } from '../../../environments/environment';
 import { HttpClient, provideHttpClient } from '@angular/common/http';
 import { ButtonComponent } from '../../components/shared/button/button.component';
 
@@ -84,7 +85,7 @@ export class PricingComponent implements OnInit {
 
   selectPlan(tier: any): void {
     if (typeof window !== 'undefined') {
-      window.location.href = `https://app.fetchxrates.com/signup/${tier.id}`;
+      window.location.href = `${environment.appUrl}/signup/${tier.id}`;
     }
   }
 
