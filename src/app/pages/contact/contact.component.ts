@@ -102,7 +102,7 @@ export class ContactComponent implements OnInit, AfterViewInit, OnDestroy {
     };
 
     this.http.post<{ success: boolean }>(
-      'https://api.fetchxrates.com/support/contact',
+      `${environment.apiUrl}/support/contact`,
       payload
     ).subscribe({
       next: () => {
