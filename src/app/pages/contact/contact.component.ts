@@ -6,6 +6,7 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { HttpClient } from '@angular/common/http';
 import { ButtonComponent } from '../../components/shared/button/button.component';
+import { environment } from '../../../environments/environment';
 
 declare const turnstile: any;
 
@@ -61,7 +62,7 @@ export class ContactComponent implements OnInit, AfterViewInit, OnDestroy {
 
   private renderTurnstile(): void {
     this.turnstileWidgetId = turnstile.render(this.turnstileContainer.nativeElement, {
-      sitekey: '0x4AAAAAAC9ZeYMCIDl8eBo9',
+      sitekey: environment.cloudflareId,
       theme: 'dark',
       callback: (token: string) => {
         this.ngZone.run(() => this.turnstileToken.set(token));
