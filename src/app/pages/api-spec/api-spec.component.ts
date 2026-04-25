@@ -1,6 +1,7 @@
 import { Component, OnInit, signal, computed } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
+import { environment } from '../../../environments/environment';
 
 export interface ApiParameter {
   name: string;
@@ -213,7 +214,7 @@ export class ApiSpecComponent implements OnInit {
   }
 
   authCodeSample(lang: CodeLang): string {
-    const url = `${this.docs()?.baseUrl ?? 'https://api.fetchxrates.com/api'}/rates?from=AUD&to=USD`;
+    const url = `${this.docs()?.baseUrl ?? `${environment.apiUrl}/api`}/rates?from=AUD&to=USD`;
     switch (lang) {
       case 'curl':
         return `curl -X GET \\\n  "${url}" \\\n  -H "x-api-key: YOUR_API_KEY" \\\n  -H "x-email: you@example.com"`;
