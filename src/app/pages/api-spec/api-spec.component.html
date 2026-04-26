@@ -165,8 +165,8 @@
             <div class="qs-step__num">1</div>
             <div class="qs-step__body">
               <h3>Sign up and get your API key</h3>
-              <p>Create an account at <a href="https://app.fetchxrates.com/signup" target="_blank" rel="noopener"><strong>app.fetchxrates.com</strong></a> and choose a plan. Once subscribed, go to <strong>API Keys</strong> in the dashboard to generate your API key. It starts with <code class="inline-code">fxr_</code> prefix.</p>
-              <a class="qs-link" href="https://fetchxrates.com/pricing" target="_blank" rel="noopener">
+              <p>Create an account at <a [href]="appUrl + '/signup'" target="_blank" rel="noopener noreferrer"><strong>{{ appUrl.replace('https://', '') }}</strong></a> and choose a plan. Once subscribed, go to <strong>API Keys</strong> in the dashboard to generate your API key. It starts with <code class="inline-code">fxr_</code> prefix.</p>
+              <a class="qs-link" href="/pricing" target="_blank" rel="noopener">
                 <span class="material-icons">open_in_new</span> View pricing plans
               </a>
             </div>
@@ -182,7 +182,7 @@
                   <span class="material-icons">terminal</span> cURL
                 </div>
                 <pre class="code-block"><code><span class="token-method">curl</span> -X <span class="token-method">GET</span> \
-  <span class="token-url">"https://api.fetchxrates.com/api/rates?from=AUD&to=USD"</span> \
+  <span class="token-url">"{{ apiUrl }}/api/rates?from=AUD&to=USD"</span> \
   -H <span class="token-header">"x-api-key: YOUR_API_KEY"</span> \
   -H <span class="token-header">"x-email: you&#64;example.com"</span></code></pre>
               </div>
@@ -422,7 +422,7 @@
           </div>
 
           <div class="intro-cta-row" style="margin-top: 1.5rem;">
-            <a class="btn-primary" href="https://fetchxrates.com/pricing" target="_blank" rel="noopener">
+            <a class="btn-primary" href="/pricing" target="_blank" rel="noopener">
               <span class="material-icons">open_in_new</span> View Plans & Limits
             </a>
           </div>
