@@ -116,6 +116,9 @@ export class ApiSpecComponent implements OnInit {
   activeCodeLang = signal<CodeLang>('curl');
   copiedId = signal<string | null>(null);
 
+  readonly appUrl = environment.appUrl;
+  readonly apiUrl = environment.apiUrl;
+
   readonly groups = ENDPOINT_GROUPS;
   readonly codeLangs: CodeLang[] = ['curl', 'javascript', 'python', 'php'];
   readonly codeLangLabels: Record<CodeLang, string> = {
