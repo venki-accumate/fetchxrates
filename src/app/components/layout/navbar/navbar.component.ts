@@ -2,6 +2,7 @@ import { Component, signal } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
 import { ButtonComponent } from '../../shared/button/button.component';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-navbar',
@@ -51,13 +52,13 @@ export class NavbarComponent {
 
   navigateToLogin(): void {
     if (typeof window !== 'undefined') {
-      window.location.href = 'https://app.fetchxrates.com/login';
+      window.location.href = `${environment.appUrl}/login`;
     }
   }
 
   navigateToSignup(): void {
     if (typeof window !== 'undefined') {
-      window.location.href = 'https://app.fetchxrates.com/signup';
+      window.location.href = `${environment.appUrl}/signup`;
     }
   }
 }
